@@ -1,0 +1,12 @@
+
+/* Asegura que el contenedor ocupe el espacio disponible en móviles */
+@media (max-width: 640px) {
+  html, body {
+    height: 100%;
+  }
+  app-root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+}

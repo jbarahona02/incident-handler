@@ -1,0 +1,84 @@
+<div class="flex items-center justify-center p-4 sm:px-6 lg:px-8 h-full sm:min-h-screen">
+  <div class="w-full max-w-md space-y-4 sm:space-y-8">
+    <!-- Logo y Título - Ajustado para móviles -->
+    <div class="text-center">
+      <img 
+        src="assets/images/logokinal.png" 
+        alt="Logo" 
+        class="mx-auto h-16 sm:h-20 w-auto" 
+      >
+      <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-white">
+        Sistema de Gestión de Incidentes
+      </h2>
+      <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-white">
+        Plataforma técnica y administrativa
+      </p>
+    </div>
+
+    <!-- Card del Formulario - Optimizado para móviles -->
+    <div class="bg-white py-6 px-4 sm:py-8 sm:px-6 shadow rounded-lg">
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="space-y-4 sm:space-y-6">
+        <!-- Campo Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Correo Electrónico
+          </label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm sm:text-base focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="tu@empresa.com"
+          >
+          @if (($emailErrors | async)?.show) {
+            <div class="mt-1 text-xs sm:text-sm text-red-600">
+              @if (($emailErrors | async)?.errors?.['required']) {
+                <p>El correo electrónico es obligatorio</p>
+              }
+              @if (($emailErrors | async)?.errors?.['pattern']) {
+                <p>El formato del correo electrónico no es válido</p>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Contraseña
+          </label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm sm:text-base focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="••••••••"
+          >
+          @if (($passwordErrors | async)?.show) {
+            <div class="mt-1 text-xs sm:text-sm text-red-600">
+              @if (($passwordErrors | async)?.errors?.['required']) {
+                <p>La contraseña es obligatoria</p>
+              }
+              @if (($passwordErrors | async)?.errors?.['minlength']) {
+                <p>La contraseña debe tener al menos 6 caracteres</p>
+              }
+              @if (($passwordErrors | async)?.errors?.['maxlength']) {
+                <p>La contraseña no puede tener más de 12 caracteres</p>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- Botón de Submit -->
+        <div>
+          <button
+            type="submit"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm sm:text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Iniciar Sesión
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

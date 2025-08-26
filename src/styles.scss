@@ -1,0 +1,36 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use './app/shared/styles/variables' as vars;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, app-root {
+  height: 100%;
+  margin: 0;
+}
+
+/* Deshabilita el zoom en todos los elementos interactivos */
+input, textarea, button, select, a {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Deshabilita el zoom de doble toque en iOS */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: pan-y;
+}
+
+/* Deshabilita la selección de texto (opcional) */
+body {
+  -webkit-user-select: none;
+  user-select: none;
+}

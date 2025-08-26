@@ -1,0 +1,39 @@
+/* Estilo para el botón de apertura */
+button[aria-label="Abrir menú"] {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* Efecto hover para ambos botones */
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Asegurar que el menú esté sobre el botón de apertura */
+aside {
+  z-index: 60; /* Mayor que el botón (z-40) */
+}
+
+@media (max-width: 1023px) {
+  main {
+    width: 90vw;
+    margin-left: 5rem;
+  }
+  
+  aside {
+    width: 90%;
+    max-width: 90%;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    margin-left: 2rem ;
+    width: calc(100% - 2rem);
+  }
+}
