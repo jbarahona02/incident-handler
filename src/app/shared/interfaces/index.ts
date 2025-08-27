@@ -1,2 +1,2 @@
-export * from "./ErrorState.interface";
-export * from "./NavItem.interface";
+export * from "./error-state.interface";
+export * from "./navitem.interface";
