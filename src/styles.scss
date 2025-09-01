@@ -1,14 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
-
+// styles.scss - VERSIÓN SIMPLIFICADA Y FUNCIONAL
+@use '@angular/material' as mat;
 @use './app/shared/styles/variables' as vars;
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$rose-palette,
+      tertiary: mat.$red-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
 body {
-    margin: 0;
-    padding: 0;
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  padding: 0;
 }
 
 html, body, app-root {
@@ -33,4 +47,28 @@ html {
 body {
   -webkit-user-select: none;
   user-select: none;
+}
+
+html, body { 
+  height: 100%; 
+}
+
+/* ===== ESTILOS MÍNIMOS PARA DIÁLOGOS ===== */
+/* Solo lo esencial para que funcionen */
+.generic-dialog .mat-mdc-dialog-container {
+  border-radius: 12px;
+}
+
+.generic-dialog .mat-mdc-dialog-surface {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsividad básica */
+@media (max-width: 600px) {
+  .generic-dialog .mat-mdc-dialog-container {
+    max-width: 95vw;
+    margin: 0 auto;
+  }
 }

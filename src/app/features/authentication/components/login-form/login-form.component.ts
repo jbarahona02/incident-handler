@@ -4,6 +4,7 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ErrorState } from '../../../../shared/interfaces';
 import { Router, RouterModule } from '@angular/router';
+import { HttpRequestService } from '../../../../shared/services/http-request/http-request.service';
 
 @Component({
   selector: 'app-login-form',
@@ -29,7 +30,8 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private httpRequest : HttpRequestService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]],
@@ -74,7 +76,7 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit() {
+  async submit() {
     this.router.navigate(["admin","home"]);
     // if (this.loginForm.valid) {
     //   console.log('Formulario enviado:', this.loginForm.value);

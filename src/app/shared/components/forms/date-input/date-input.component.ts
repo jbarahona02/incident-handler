@@ -1,5 +1,4 @@
-// date-input.component.ts
-import { Component, Input, Optional, Self } from '@angular/core';
+import { Component, Optional, Self } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { BaseInputComponent } from '../base-input/base-input.component';
 
@@ -8,36 +7,33 @@ import { BaseInputComponent } from '../base-input/base-input.component';
   templateUrl: './date-input.component.html'
 })
 export class DateInputComponent extends BaseInputComponent {
-  @Input() minDate: string = '';
-  @Input() maxDate: string = '';
-
+  
   constructor(@Optional() @Self() ngControl: NgControl) {
     super(ngControl);
   }
 
-  onInputChange(event: Event): void {
+  // Método específico para date input
+  handleDateChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    this.value = inputElement.value;
+    this.value = inputElement.value; // Guardamos como string (formato YYYY-MM-DD)
     this.onChange(this.value);
     this.onTouched();
   }
 
-  formatToIsoDate(date: string): string {
-    if (!date) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return date;
-    if (/^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
-      const [day, month, year] = date.split('/');
-      return `${year}-${month}-${day}`;
+  // Convertir a formato ISO para el input date
+  get dateValue(): string {
+    if (!this.value) return '';
+    
+    // Si es una fecha, convertir a formato YYYY-MM-DD
+    if (this.value instanceof Date) {
+      return this.value.toISOString().split('T')[0];
     }
-    return date;
-  }
-
-  formatToDisplayDate(date: string): string {
-    if (!date) return '';
-    if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-      const [year, month, day] = date.split('-');
-      return `${day}/${month}/${year}`;
+    
+    // Si ya es string en formato YYYY-MM-DD
+    if (typeof this.value === 'string') {
+      return this.value;
     }
-    return date;
+    
+    return '';
   }
 }

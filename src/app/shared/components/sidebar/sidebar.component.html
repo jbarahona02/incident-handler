@@ -12,16 +12,15 @@
   <aside 
     [class.translate-x-0]="isMobileMenuOpen"
     [class.-translate-x-full]="!isMobileMenuOpen"
-    class="fixed lg:sticky top-0 left-0 z-50 w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out lg:translate-x-0"
+    class="fixed lg:sticky top-0 left-0 z-50 w-64 h-screen bg-gray-800 text-white transition-transform duration-300 ease-in-out lg:translate-x-0 overflow-y-auto"
   >
-    <!-- Cabecera con botón de cierre -->
+    <!-- Cabecera -->
     <div class="p-4 border-b border-gray-700 flex justify-between items-center">
       <div class="flex items-center space-x-2">
         <img src="assets/images/logokinal.png" alt="Logo" class="h-8 w-auto">
         <span class="text-lg font-semibold">Gestión de incidentes</span>
       </div>
       
-      <!-- Botón de cierre (visible solo en móviles) -->
       <button 
         class="lg:hidden text-gray-300 hover:text-white"
         (click)="toggleMobileMenu()"
@@ -33,27 +32,80 @@
 
     <!-- Menú de navegación -->
     <nav class="p-4">
-      <ul class="space-y-2">
-        @for (item of navItems; track item.path) {
-          <li>
-            <a 
-              [routerLink]="item.path" 
-              routerLinkActive="bg-gray-700"
-              class="flex items-center p-2 rounded hover:bg-gray-700 transition-colors"
-              (click)="isMobileMenuOpen && toggleMobileMenu()"
-            >
-              <span class="material-icons-outlined mr-3">{{ item.icon }}</span>
-              <span>{{ item.label }}</span>
-            </a>
-          </li>
-        }
-      </ul>
+      @if (isLoading) {
+        <!-- Loading state -->
+        <div class="space-y-2">
+          @for (item of [1,2,3]; track $index) {
+            <div class="h-10 bg-gray-700 rounded animate-pulse"></div>
+          }
+        </div>
+      } @else {
+        <!-- Menu items -->
+        <ul class="space-y-2">
+          @for (item of navItems; track item.path + (item.children ? item.children.length : 0)) {
+            <li>
+              <a 
+                [routerLink]="item.children ? null : item.path" 
+                routerLinkActive="bg-gray-700"
+                [class.bg-gray-700]="hasActiveChild(item)"
+                class="flex items-center justify-between p-2 rounded hover:bg-gray-700 transition-colors cursor-pointer"
+                (click)="navigateTo(item, $event)"
+              >
+                <div class="flex items-center">
+                  <span class="material-icons-outlined mr-3">{{ item.icon }}</span>
+                  <span>{{ item.label }}</span>
+                </div>
+                
+                @if (item.children && item.children.length > 0) {
+                  <span 
+                    class="material-icons-outlined transition-transform duration-200 text-sm"
+                    [class.rotate-90]="item.expanded"
+                  >
+                    expand_more
+                  </span>
+                } @else {
+                  <!-- Espacio reservado para alinear items sin hijos -->
+                  <span class="w-5 h-5"></span>
+                }
+              </a>
+              
+              <!-- Submenú desplegable -->
+              @if (item.children && item.children.length > 0 && item.expanded) {
+                <ul class="ml-6 mt-1 space-y-1 border-l border-gray-600 pl-2">
+                  @for (child of item.children; track child.path) {
+                    <li>
+                      <a 
+                        [routerLink]="child.path" 
+                        routerLinkActive="bg-gray-700"
+                        class="flex items-center p-2 rounded hover:bg-gray-700 transition-colors text-sm"
+                        (click)="isMobileView && toggleMobileMenu()"
+                      >
+                        <span class="material-icons-outlined mr-3 text-xs">{{ child.icon }}</span>
+                        <span>{{ child.label }}</span>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+            <li>
+              <a 
+                class="flex items-center justify-between p-2 rounded hover:bg-gray-700 transition-colors cursor-pointer"
+              >
+                <div class="flex items-center">
+                  <span class="material-icons-outlined mr-3">close</span>
+                  <span>Cerrar sesión</span>
+                </div>
+              </a>
+             </li>
+        </ul>
+      }
     </nav>
   </aside>
 
   <!-- Contenido principal -->
   <main class="flex-1 overflow-auto">
-    <!-- Botón para abrir menú en móviles (solo visible cuando el menú está cerrado) -->
     @if (!isMobileMenuOpen && isMobileView) {
       <button 
         class="lg:hidden fixed top-4 left-4 z-40 p-2 bg-gray-800 rounded-md shadow-lg hover:bg-gray-700 transition-colors"

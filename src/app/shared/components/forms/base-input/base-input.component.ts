@@ -1,6 +1,6 @@
 // base-input.component.ts
 import { Component, Input, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NgControl, FormControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, AbstractControl } from '@angular/forms';
 
 @Component({
   template: '' // Componente abstracto
@@ -11,6 +11,13 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
   @Input() required: boolean = false;
   @Input() disabled: boolean = false;
   @Input() errorMessages: { [key: string]: string } = {};
+  @Input() min: number | null = null;
+  @Input() max: number | null = null;
+  @Input() minLength: number | null = null;
+  @Input() maxLength: number | null = null;
+  @Input() pattern: string | null = null;
+  @Input() step: number | null = null;
+  @Input() options: any[] = [];
   
   value: any;
   onChange: any = () => {};
@@ -22,8 +29,8 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
     }
   }
 
-  get control(): FormControl | null {
-    return this.ngControl?.control as FormControl;
+  get control(): AbstractControl | null {
+    return this.ngControl?.control as AbstractControl;
   }
 
   writeValue(value: any): void {
@@ -45,21 +52,55 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
   getErrorMessage(): string {
     if (!this.control || !this.control.errors || !this.control.touched) return '';
     
-    const firstError = Object.keys(this.control.errors)[0];
-    return this.errorMessages[firstError] || this.getDefaultErrorMessage(firstError);
+    const errors = this.control.errors;
+    
+    if (errors['required']) {
+      return this.errorMessages['required'] || 'Este campo es obligatorio';
+    }
+    if (errors['maxlength']) {
+      const requiredLength = errors['maxlength'].requiredLength;
+      return this.errorMessages['maxlength'] || `Máximo ${requiredLength} caracteres permitidos`;
+    }
+    if (errors['minlength']) {
+      const requiredLength = errors['minlength'].requiredLength;
+      return this.errorMessages['minlength'] || `Mínimo ${requiredLength} caracteres requeridos`;
+    }
+    if (errors['email']) {
+      return this.errorMessages['email'] || 'Formato de email inválido';
+    }
+    if (errors['min']) {
+      const minValue = errors['min'].min;
+      return this.errorMessages['min'] || `El valor mínimo permitido es ${minValue}`;
+    }
+    if (errors['max']) {
+      const maxValue = errors['max'].max;
+      return this.errorMessages['max'] || `El valor máximo permitido es ${maxValue}`;
+    }
+    if (errors['pattern']) {
+      return this.errorMessages['pattern'] || 'El formato no es válido';
+    }
+    
+    return this.errorMessages['default'] || 'Error de validación';
   }
 
-  private getDefaultErrorMessage(errorType: string): string {
-    const errorMessages: { [key: string]: string } = {
-      'required': 'Este campo es obligatorio',
-      'email': 'Formato de email inválido',
-      'minlength': 'El texto es demasiado corto',
-      'maxlength': 'El texto es demasiado largo',
-      'min': 'El valor es demasiado bajo',
-      'max': 'El valor es demasiado alto',
-      'pattern': 'El formato no es válido'
-    };
-    
-    return errorMessages[errorType] || 'Error de validación';
+  // Método genérico para manejar cambios de input
+  handleInputChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.value = inputElement.value;
+    this.onChange(this.value);
+    this.onTouched();
+  }
+
+  // Método genérico para manejar cambios de textarea
+  handleTextareaChange(event: Event): void {
+    const textareaElement = event.target as HTMLTextAreaElement;
+    this.value = textareaElement.value;
+    this.onChange(this.value);
+    this.onTouched();
+  }
+
+  // Método para manejar el blur
+  handleBlur(): void {
+    this.onTouched();
   }
 }
