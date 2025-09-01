@@ -2,11 +2,13 @@ import { Routes } from "@angular/router";
 import { NavItem } from "../../shared/interfaces";
 import { Sidebar } from "../../shared/components/sidebar/sidebar.component";
 
+/*ENUM que relaciona los menuOptionCode de la DB*/ 
 export enum ADMIN_PAGES {
     HOME = 'home',
     DASHBOARD = 'dashboard',
     INCIDENTES = 'incidentes',
-    USUARIOS = 'usuarios'
+    USERS = 'usuarios',
+    ROLES = 'roles'
 }
 
 const adminItems: NavItem[] = [
@@ -14,11 +16,6 @@ const adminItems: NavItem[] = [
         path: ADMIN_PAGES.HOME, 
         label: 'Inicio', 
         icon: 'home' 
-    },
-    {
-        path: ADMIN_PAGES.DASHBOARD,
-        label: 'Dashboard',
-        icon: 'check'
     }
 ];
 
@@ -26,7 +23,7 @@ export const ADMIN_ROUTES: Routes = [
     {
         path: '',
         component: Sidebar,
-        data: { navItems: adminItems }, // Pasamos los items del menú
+        data: { navItems: adminItems , role : "ADMIN" }, // Pasamos los items del menú
         children: [
             {
                 path: '',
@@ -38,8 +35,8 @@ export const ADMIN_ROUTES: Routes = [
                 loadComponent: () => import('./pages/home-admin/home-admin.page').then(c => c.HomeAdminPage)
             },
             {
-                path: ADMIN_PAGES.DASHBOARD,
-                loadComponent: () => import('./pages/opcion2-admin/opcion2-admin.page').then(c => c.Opcion2AdminPage)
+                path: ADMIN_PAGES.ROLES,
+                loadComponent: () => import('./pages/catalogs/role/role.component').then(c => c.RoleComponent)
             }
         ]
     },

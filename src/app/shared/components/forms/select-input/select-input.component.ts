@@ -8,7 +8,6 @@ import { BaseInputComponent } from '../base-input/base-input.component';
   templateUrl: './select-input.component.html'
 })
 export class SelectInputComponent extends BaseInputComponent {
-  @Input() options: any[] = [];
   @Input() optionValue: string = 'id';
   @Input() optionLabel: string = 'name';
 

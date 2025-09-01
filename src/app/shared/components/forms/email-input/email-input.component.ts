@@ -8,11 +8,13 @@ import { BaseInputComponent } from '../base-input/base-input.component';
   templateUrl: './email-input.component.html'
 })
 export class EmailInputComponent extends BaseInputComponent {
+  
   constructor(@Optional() @Self() ngControl: NgControl) {
     super(ngControl);
   }
 
-  onInputChange(event: Event): void {
+  // Método específico para email input
+  handleEmailChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.value = inputElement.value;
     this.onChange(this.value);

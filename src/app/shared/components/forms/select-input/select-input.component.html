@@ -29,7 +29,7 @@
   </select>
   
   @if (control?.invalid && control?.touched) {
-    <div class="mt-1 text-sm text-red-600">
+    <div class="mt-1 text-xs sm:text-sm text-red-600">
       {{ getErrorMessage() }}
     </div>
   }

@@ -19,6 +19,106 @@ aside {
   z-index: 60; /* Mayor que el botón (z-40) */
 }
 
+/* ========== ESTILOS PARA SUBMENÚS DESPLEGABLES ========== */
+
+/* Rotación de ícono para menús expandidos */
+.rotate-90 {
+  transform: rotate(90deg);
+}
+
+/* Transición suave para el ícono */
+.material-icons-outlined {
+  transition: transform 0.3s ease;
+}
+
+/* Estilos para los submenús */
+.ml-6 {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* Cuando el submenú está expandido */
+.ml-6[style*="display: block"],
+.ml-6:not([style]) {
+  max-height: 500px; /* Altura máxima suficiente para los items */
+  opacity: 1;
+}
+
+/* Mejor visualización para items activos */
+.bg-gray-700 {
+  .material-icons-outlined {
+    color: white;
+  }
+}
+
+/* Estilos para el overlay de móviles */
+.fixed.inset-0 {
+  backdrop-filter: blur(2px);
+}
+
+/* Mejora la visualización de los submenús */
+.border-l {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustes para items hover */
+.hover\:bg-gray-700:hover {
+  transition: background-color 0.2s ease;
+}
+
+/* Loading animation mejorada */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+}
+
+/* Mejora la visualización en móviles */
+@media (max-width: 1023px) {
+  .fixed.w-64 {
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Asegurar que el menú móvil ocupe todo el alto */
+  .h-screen {
+    height: 100vh;
+  }
+}
+
+/* Asegura que el scroll funcione correctamente */
+.overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* ========== ESTILOS RESPONSIVE ========== */
+
 @media (max-width: 1023px) {
   main {
     width: 90vw;
@@ -29,11 +129,154 @@ aside {
     width: 90%;
     max-width: 90%;
   }
+  
+  /* Asegurar que el overlay ocupe toda la pantalla */
+  .fixed.inset-0 {
+    z-index: 50;
+  }
 }
 
 @media (min-width: 1024px) {
   main {
-    margin-left: 2rem ;
+    margin-left: 2rem;
     width: calc(100% - 2rem);
+  }
+  
+  /* Estilos específicos para desktop */
+  .lg\:sticky {
+    position: sticky;
+  }
+  
+  .lg\:translate-x-0 {
+    transform: translateX(0);
+  }
+}
+
+/* ========== MEJORAS VISUALES ========== */
+
+/* Suavizar transiciones */
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Mejorar la legibilidad del texto */
+.text-white {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.text-gray-300 {
+  color: rgba(209, 213, 219, 0.8);
+}
+
+/* Efectos hover mejorados */
+.hover\:text-white:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Sombras mejoradas */
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+/* ========== ESTILOS PARA ESTADOS DE CARGA ========== */
+
+.space-y-2 > * + * {
+  margin-top: 0.5rem;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.bg-gray-700 {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+/* ========== ANIMACIONES ========== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Aplicar animación a los items del menú */
+.space-y-2 > li {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Retraso escalonado para la animación */
+.space-y-2 > li:nth-child(1) { animation-delay: 0.1s; }
+.space-y-2 > li:nth-child(2) { animation-delay: 0.2s; }
+.space-y-2 > li:nth-child(3) { animation-delay: 0.3s; }
+.space-y-2 > li:nth-child(4) { animation-delay: 0.4s; }
+.space-y-2 > li:nth-child(5) { animation-delay: 0.5s; }
+
+/* ========== ESTILOS PARA BOTONES ========== */
+
+button {
+  cursor: pointer;
+  outline: none;
+  
+  &:focus {
+    outline: 2px solid rgba(59, 130, 246, 0.5);
+    outline-offset: 2px;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+/* ========== MEJORAS DE ACCESIBILIDAD ========== */
+
+/* Mejorar contraste para accesibilidad */
+.bg-gray-800 {
+  background-color: rgba(31, 41, 55, 0.95);
+}
+
+.border-gray-700 {
+  border-color: rgba(55, 65, 81, 0.5);
+}
+
+/* Asegurar que los textos sean legibles */
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* ========== ESTILOS PARA EL LOGO ========== */
+
+img.h-8 {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: rotate(-5deg);
   }
 }

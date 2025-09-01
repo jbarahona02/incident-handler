@@ -8,17 +8,11 @@ import { BaseInputComponent } from '../base-input/base-input.component';
   templateUrl: './textarea-input.component.html'
 })
 export class TextareaInputComponent extends BaseInputComponent {
-  @Input() rows: number = 3;
+  @Input() rows: number = 4;
   @Input() cols: number = 20;
 
   constructor(@Optional() @Self() ngControl: NgControl) {
     super(ngControl);
   }
 
-  onInputChange(event: Event): void {
-    const textareaElement = event.target as HTMLTextAreaElement;
-    this.value = textareaElement.value;
-    this.onChange(this.value);
-    this.onTouched();
-  }
 }

@@ -1,0 +1,37 @@
+ <div class="dialog-container" [class]="data.type">
+    <div class="dialog-header">
+    <div class="dialog-icon">
+        <ng-container [ngSwitch]="data.type">
+        <svg *ngSwitchCase="'error'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#f44336" width="48px" height="48px">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        <svg *ngSwitchCase="'success'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4caf50" width="48px" height="48px">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        <svg *ngSwitchCase="'warning'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ff9800" width="48px" height="48px">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+        </svg>
+        <svg *ngSwitchCase="'info'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2196f3" width="48px" height="48px">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        <svg *ngSwitchCase="'confirm'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2196f3" width="48px" height="48px">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </svg>
+        </ng-container>
+    </div>
+    <h2 class="dialog-title">{{ data.title }}</h2>
+    </div>
+    
+    <div class="dialog-content">
+    <p class="dialog-message">{{ data.message }}</p>
+    </div>
+    
+    <div class="dialog-actions">
+    <button *ngIf="data.type === 'confirm'" mat-stroked-button (click)="onCancel()">
+        {{ data.cancelText || 'Cancelar' }}
+    </button>
+    <button mat-raised-button [color]="getButtonColor()" (click)="onConfirm()">
+        {{ getButtonText() }}
+    </button>
+    </div>
+</div>

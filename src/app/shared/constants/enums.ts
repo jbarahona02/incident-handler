@@ -1,7 +1,7 @@
 export enum PRIORITIES {
-    HIGH = "Alta",
-    MEDIUM = "Media",
-    LOW = "Baja"
+    LOW = 'LOW',
+    MEDIUM = 'MEDIUM', 
+    HIGH = 'HIGH'
 }
 
 export enum INCIDENT_STATUS {

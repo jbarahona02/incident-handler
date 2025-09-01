@@ -1,5 +1,5 @@
 // number-input.component.ts
-import { Component, Input, Optional, Self } from '@angular/core';
+import { Component, Optional, Self } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { BaseInputComponent } from '../base-input/base-input.component';
 
@@ -8,18 +8,25 @@ import { BaseInputComponent } from '../base-input/base-input.component';
   templateUrl: './number-input.component.html'
 })
 export class NumberInputComponent extends BaseInputComponent {
-  @Input() min: number | null = null;
-  @Input() max: number | null = null;
-  @Input() step: number = 1;
-
+  
   constructor(@Optional() @Self() ngControl: NgControl) {
     super(ngControl);
   }
 
-  onInputChange(event: Event): void {
+  // Método específico para number input
+  handleNumberChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    this.value = inputElement.value;
+    const numericValue = inputElement.valueAsNumber;
+    
+    // Guardar como número (no como string)
+    this.value = isNaN(numericValue) ? null : numericValue;
     this.onChange(this.value);
     this.onTouched();
+  }
+
+  // Getter para el valor del input (convertir a string para el input)
+  get numberValue(): string {
+    if (this.value === null || this.value === undefined) return '';
+    return this.value.toString();
   }
 }

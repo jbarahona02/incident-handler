@@ -7,7 +7,7 @@
   <!-- Grid de Cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Card de Incidente -->
-    @for (incident of incidents; track incident.id) {
+    @for (incident of incidents; track incident.incidentId) {
        <app-incident-card [incident]="incident"></app-incident-card>
     }
   </div>
