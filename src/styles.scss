@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+// Incluir las funciones centrales de Angular Material
+@include mat.core();
+
 html {
   @include mat.theme((
     color: (
@@ -71,4 +74,9 @@ html, body {
     max-width: 95vw;
     margin: 0 auto;
   }
+}
+
+
+.mat-progress-spinner circle, .mat-spinner circle {
+  stroke: #2196F3 !important;
 }
