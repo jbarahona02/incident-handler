@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NavItem } from '../../interfaces';
 import { MenuOptionService } from '../../services/menu-option/menu-option.service';
+import { AuthService } from '../../../features/authentication/services/auth/auth-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,7 +33,8 @@ export class Sidebar implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private menuOptionService: MenuOptionService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   async ngOnInit() {
@@ -92,5 +94,10 @@ export class Sidebar implements OnInit {
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeSession(){
+    this.authService.clearAuthData();
+    this.router.navigate(["authentication"]);
   }
 }

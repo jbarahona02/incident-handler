@@ -2,15 +2,14 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Role } from '../../../../../shared/interfaces/models';
 import { RoleService } from '../../../services/role/role.service';
 import { TransformObject } from '../../../../../shared/interfaces';
-import { DataTableComponent } from "../../../../../shared/components/data-table/data-table.component";
 import { CommonModule } from '@angular/common';
-import { TextInputComponent } from '../../../../../shared/components/forms/text-input/text-input.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TextareaInputComponent } from '../../../../../shared/components/forms/textarea-input/textarea-input.component';
+import { CheckboxInputComponent, DataTableComponent, TextareaInputComponent, TextInputComponent } from '../../../../../shared/components';
+import { MessageService } from '../../../../../shared/services/message-service/message.service';
 
 @Component({
   selector: 'app-role',
-  imports: [ CommonModule, ReactiveFormsModule, DataTableComponent, TextInputComponent, TextareaInputComponent],
+  imports: [ CommonModule, ReactiveFormsModule, DataTableComponent, TextInputComponent, TextareaInputComponent, CheckboxInputComponent],
   templateUrl: './role.component.html',
   styleUrl: './role.component.scss'
 })
@@ -21,13 +20,15 @@ export class RoleComponent {
   rolesToView : TransformObject[] = [];
   isLoading : boolean = true;
   isAddRole : boolean = false; 
+  isEditRole : boolean = false;
   // Headers nombre del encabezado de las columnas
   headers: string[] = ['Código','Nombre','Descripción','Estado'];
 
   constructor(
     private formGroup : FormBuilder,
     private changeDetectorRef : ChangeDetectorRef,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private messageService : MessageService
   ){
      this.roleForm = this.formGroup.group({
       roleCode: ['', [
@@ -41,15 +42,16 @@ export class RoleComponent {
       description: ['', [
         Validators.required,
         Validators.maxLength(50)
-      ]]
+      ]],
+      isActive: [{value: true, disabled: this.isAddRole}]
     });
   }
 
   async ngOnInit() {
-    await this.getAllRole();
+    await this.getAllRoles();
   }
 
-  async getAllRole(){
+  async getAllRoles(){
     try {
       this.isLoading = true;
       this.allRoles = await this.roleService.getAllRoles();
@@ -63,29 +65,56 @@ export class RoleComponent {
   }
 
   async addRole() {
-    try {
-       this.isAddRole = true;
-    } catch (err) {
-       this.isAddRole = false;
-    }
+      this.isAddRole = true;
   }
 
   async editRole(object : TransformObject){
+    let role = this.allRoles.find(role => role.roleCode == object['id']);
+
+    this.roleForm.setValue({
+      roleCode: role?.roleCode || '',
+      name: role?.name || '',
+      description: role?.description || '',
+      isActive: role?.isActive
+    })
+
+    this.isEditRole = true;
 
   }
 
   async deleteRole(object : TransformObject){
-
+    try {
+      this.isLoading = true;
+      await this.roleService.deleteRole(object['id']);
+      this.messageService.showSuccess("Rol eliminado con éxito.","Rol").subscribe();
+      await this.getAllRoles();
+      this.isLoading = false;
+    } catch(err) {
+      this.isLoading = false;
+    }
   }
 
   async onSubmit(): Promise<void> {
     if (this.roleForm.valid) {
-      console.log("form: ", this.roleForm.value);
       try {
+        this.isLoading = true;
         this.roleForm.value.roleCode = String(this.roleForm.value.roleCode).toUpperCase();
-        await this.roleService.createRole(this.roleForm.value);
+        
+        if(this.isAddRole) {
+          await this.roleService.createRole(this.roleForm.value);
+          this.messageService.showSuccess("Rol agregado con éxito.","Rol").subscribe();
+        } else {
+           await this.roleService.updateRole(this.roleForm.value['roleCode'],this.roleForm.value);
+           this.messageService.showSuccess("Rol actualizado con éxito.","Rol").subscribe();
+        }
+        
+        this.isLoading = false;
+        await this.getAllRoles();
+        this.cleanValuesOfForm();
+        this.isAddRole = false;
+        this.isEditRole = false;
       } catch(err) {
-
+        this.isLoading = false;
       }
     } else {
       this.markFormGroupTouched(this.roleForm);
@@ -94,6 +123,8 @@ export class RoleComponent {
 
   onCancel(): void {
     this.isAddRole = false;
+    this.isEditRole = false;
+    this.cleanValuesOfForm();
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
@@ -123,5 +154,22 @@ export class RoleComponent {
       return 'text-yellow-600';
     }
     return 'text-gray-500';
+  }
+
+  cleanValuesOfForm(){
+    this.roleForm.reset({
+      isActive: true
+    });
+  }
+
+  ngOnChanges() {
+    const isActiveControl = this.roleForm.get('isActive');
+    if (isActiveControl) {
+      if (this.isAddRole) {
+        isActiveControl.disable();
+      } else {
+        isActiveControl.enable();
+      }
+    }
   }
 }

@@ -1,0 +1,6 @@
+
+
+export const ConstantsEndpoints = {
+    AUTH_MICROSERVICE : "auth",
+    USER_MICROSERVICE: "user"
+}

@@ -44,6 +44,7 @@
     justify-content: center;
     overflow-y: auto;
     max-height: 200px;
+    background-color: #f8f9fa;
 }
 
 .dialog-message {
@@ -92,4 +93,60 @@
     .dialog-actions button {
     width: 100%;
     }
+}
+
+// Nuevos estilos para los botones según el tipo de alerta
+.error-button {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+.success-button {
+    background-color: #4caf50 !important;
+    color: white !important;
+}
+
+.warning-button {
+    background-color: #ff9800 !important;
+    color: white !important;
+}
+
+.info-button {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
+
+.confirm-button {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
+
+.cancel-button {
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+}
+
+// Efectos hover para mejor UX
+.error-button:hover {
+    background-color: #d32f2f !important;
+}
+
+.success-button:hover {
+    background-color: #388e3c !important;
+}
+
+.warning-button:hover {
+    background-color: #f57c00 !important;
+}
+
+.info-button:hover {
+    background-color: #1976d2 !important;
+}
+
+.confirm-button:hover {
+    background-color: #1976d2 !important;
+}
+
+.cancel-button:hover {
+    background-color: #f8f9fa !important;
 }

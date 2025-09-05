@@ -3,7 +3,9 @@ import { HttpRequestService } from '../../../../shared/services/http-request/htt
 import { Role } from '../../../../shared/interfaces/models';
 import { AdminEndpoints } from '../../constants/admin-endpoints';
 import { TransformObject } from '../../../../shared/interfaces';
+import { ConstantsEndpoints } from '../../../../shared/constants/constants-endpoints';
 
+const userMicroService = ConstantsEndpoints.USER_MICROSERVICE;
 @Injectable({
   providedIn: 'root'
 })
@@ -19,7 +21,7 @@ export class RoleService {
 
   async getAllRoles() : Promise<Role[]> {
     try {
-      return await this.httpResquestService.get(AdminEndpoints.ALL_ROLES);
+      return await this.httpResquestService.get(userMicroService,AdminEndpoints.ALL_ROLES);
     } catch (err) {
       return [];
     }
@@ -50,6 +52,27 @@ export class RoleService {
   }
 
   async createRole(newRole : Role) {
-    return await this.httpResquestService.post(AdminEndpoints.CREATE_ROLE,{...newRole});
+
+    let body = {
+      roleCode : newRole.roleCode,
+      name: newRole.name,
+      description: newRole.description
+    };
+
+    return await this.httpResquestService.post(userMicroService,AdminEndpoints.ROLE,body);
+  }
+
+  async deleteRole(roleCode: string) {
+    return await this.httpResquestService.delete(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`);
+  }
+
+  async updateRole(roleCode: string, updateRole : Role) {
+    let body = {
+      name: updateRole.name,
+      description: updateRole.description,
+      isActive: updateRole.isActive
+    };
+    
+    return await this.httpResquestService.put(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`,body);
   }
 }

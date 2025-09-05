@@ -1,6 +1,6 @@
 
 export interface Role {
-    rolCode: string;
+    roleCode: string;
     name: string;
     description: string;
     isActive?: string;

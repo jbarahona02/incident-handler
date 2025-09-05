@@ -1,0 +1,39 @@
+<div class="mb-4">
+    <label class="flex items-center" [class.cursor-pointer]="!isDisabled" [class.opacity-60]="isDisabled">
+    <div class="relative">
+        <input 
+        type="checkbox" 
+        class="sr-only"
+        [checked]="value"
+        (change)="onCheckboxChange($event)"
+        (blur)="onTouched()"
+        [disabled]="isDisabled"
+        >
+        <div 
+        class="toggle-line block w-12 h-6 rounded-full transition-colors duration-200 ease-in-out"
+        [class.bg-blue-600]="value && !isDisabled"
+        [class.bg-gray-400]="value && isDisabled"
+        [class.bg-gray-300]="!value && !isDisabled"
+        [class.bg-gray-200]="!value && isDisabled"
+        ></div>
+        <div 
+        class="toggle-dot absolute left-1 top-1 w-4 h-4 rounded-full transition-transform duration-200 ease-in-out"
+        [class.bg-white]="!isDisabled"
+        [class.bg-gray-100]="isDisabled"
+        [class.translate-x-6]="value"
+        ></div>
+    </div>
+    <span class="ml-3 text-sm font-medium text-gray-700">
+        {{ label }}
+        @if (required) {
+        <span class="text-red-500">*</span>
+        }
+    </span>
+    </label>
+    
+    @if (control && control.invalid && control.touched) {
+    <div class="mt-1 text-xs sm:text-sm text-red-600">
+        {{ getErrorMessage() }}
+    </div>
+    }
+</div>

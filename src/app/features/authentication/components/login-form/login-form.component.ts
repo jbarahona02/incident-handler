@@ -4,7 +4,9 @@ import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validator
 import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { ErrorState } from '../../../../shared/interfaces';
 import { Router, RouterModule } from '@angular/router';
-import { HttpRequestService } from '../../../../shared/services/http-request/http-request.service';
+import { LoginService } from '../../../admin/services/login/login.service';
+import { AuthService } from '../../services/auth/auth-service';
+import { LoginResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-login-form',
@@ -31,11 +33,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private httpRequest : HttpRequestService
+    private loginService : LoginService,
+    private authService: AuthService
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(12)]]
+      password: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(12)]]
     });
   }
 
@@ -77,20 +80,35 @@ export class LoginFormComponent implements OnInit, OnDestroy {
   }
 
   async submit() {
-    this.router.navigate(["admin","home"]);
-    // if (this.loginForm.valid) {
-    //   console.log('Formulario enviado:', this.loginForm.value);
-    //   // Aquí puedes hacer la llamada al backend
-    //   // this.router.navigate(['admin','home']);
-    // } else {
-    //   // Marcar todos los campos como tocados para mostrar errores
-    //   Object.keys(this.loginForm.controls).forEach(key => {
-    //     const control = this.loginForm.get(key);
-    //     if (control) {
-    //       control.markAsTouched();
-    //       this.updateErrorState(control, key === 'email' ? this.emailErrorSubject : this.passwordErrorSubject);
-    //     }
-    //   });
-    // }
+    try {
+      // this.router.navigate(["admin","home"]);
+      if (this.loginForm.valid) {
+        console.log('Formulario enviado:', this.loginForm.value);
+      
+        const loginResponse : LoginResponse =  await this.loginService.login(this.loginForm.value);
+
+         // Guardar los tokens usando el AuthService
+        this.authService.setTokens(
+          loginResponse.accessToken,
+          loginResponse.refreshToken,
+          loginResponse.expiresIn,
+          loginResponse.refreshExpiresIn
+        );
+
+        // Aquí puedes hacer la llamada al backend
+        this.router.navigate(["admin","home"]);
+      } else {
+        // Marcar todos los campos como tocados para mostrar errores
+        Object.keys(this.loginForm.controls).forEach(key => {
+          const control = this.loginForm.get(key);
+          if (control) {
+            control.markAsTouched();
+            this.updateErrorState(control, key === 'email' ? this.emailErrorSubject : this.passwordErrorSubject);
+          }
+        });
+      }
+    } catch(err){
+
+    }
   }
 }

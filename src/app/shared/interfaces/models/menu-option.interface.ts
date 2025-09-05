@@ -3,6 +3,6 @@ export interface MenuOption {
     menuOptionCode: string;
     menuFatherOption: string | null;
     name: string;
-    isActive: boolean;
+    isActive?: boolean;
     children?: MenuOption[];
 }

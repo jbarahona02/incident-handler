@@ -7,5 +7,5 @@ export interface UserApp {
     createdAt: Date;
     updatedAt: Date;
     userTypeCode: string;
-    isActive: boolean;
+    isActive?: boolean;
 }
