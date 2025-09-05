@@ -28,7 +28,8 @@ export type RequestOptions = {
   providedIn: 'root'
 })
 export class HttpRequestService {
-  private baseUrl: string = environment.apiUrl;
+  private userUrlBase: string = environment.apiUserMicroService;
+  private authUrlBase: string = environment.apiAuthMicroService;
 
   constructor(
     private http: HttpClient,
@@ -38,8 +39,8 @@ export class HttpRequestService {
   /**
    * Realiza una petición GET
    */
-  async get<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.buildUrl(endpoint);
+  async get<T>(microService: string, endpoint: string, options?: RequestOptions): Promise<T> {
+    const url = this.buildUrl(microService,endpoint);
     const requestOptions = options || {};
     
     try {
@@ -47,7 +48,6 @@ export class HttpRequestService {
       const response = await lastValueFrom(response$);
       return response.data;
     } catch (error) {
-      console.log("EROR");
       return this.handleError(error as HttpErrorResponse);
     }
   }
@@ -55,12 +55,12 @@ export class HttpRequestService {
   /**
    * Realiza una petición POST
    */
-  async post<T>(endpoint: string, body: any): Promise<T> {
-    const url = this.buildUrl(endpoint);
-    
+  async post<T>(microService: string,endpoint: string, body: any, options?: RequestOptions): Promise<T> {
+    const url = this.buildUrl(microService,endpoint);
+    const requestOptions = options || {};
+
     try {
-      console.log("VALUES:", JSON.stringify(body));
-      const response$ = this.http.post<ApiResponse<T>>(url, JSON.stringify(body));
+      const response$ = this.http.post<ApiResponse<T>>(url, body, { ...requestOptions, observe: 'body' as const });
       const response = await lastValueFrom(response$);
       return response.data;
     } catch (error) {
@@ -71,8 +71,8 @@ export class HttpRequestService {
   /**
    * Realiza una petición PUT
    */
-  async put<T>(endpoint: string, body: any, options?: RequestOptions): Promise<T> {
-    const url = this.buildUrl(endpoint);
+  async put<T>(microService: string, endpoint: string, body: any, options?: RequestOptions): Promise<T> {
+    const url = this.buildUrl(microService,endpoint);
     const requestOptions = options || {};
     
     try {
@@ -87,8 +87,8 @@ export class HttpRequestService {
   /**
    * Realiza una petición PATCH
    */
-  async patch<T>(endpoint: string, body: any, options?: RequestOptions): Promise<T> {
-    const url = this.buildUrl(endpoint);
+  async patch<T>(microService: string, endpoint: string, body: any, options?: RequestOptions): Promise<T> {
+    const url = this.buildUrl(microService, endpoint);
     const requestOptions = options || {};
     
     try {
@@ -103,17 +103,15 @@ export class HttpRequestService {
   /**
    * Realiza una petición DELETE
    */
-  async delete<T>(endpoint: string, options?: RequestOptions): Promise<T> {
-    const url = this.buildUrl(endpoint);
+  async delete<T>(microService: string, endpoint: string, options?: RequestOptions): Promise<T> {
+    const url = this.buildUrl(microService, endpoint);
     const requestOptions = options || {};
     
     try {
       const response$ = this.http.delete<ApiResponse<T>>(url, { ...requestOptions, observe: 'body' as const });
       const response = await lastValueFrom(response$);
-       console.log("RESPUESTA");
       return response.data;
     } catch (error) {
-      console.log("ERROR");
       return this.handleError(error as HttpErrorResponse);
     }
   }
@@ -132,15 +130,24 @@ export class HttpRequestService {
   /**
    * Construye la URL completa
    */
-  private buildUrl(endpoint: string): string {
-    return `${this.baseUrl.replace(/\/$/, '')}/${endpoint}`;
+  private buildUrl(microServe: string, endpoint: string): string {
+    let url : string  ="";
+
+    switch (microServe){
+      case 
+        'user': url = `${this.userUrlBase.replace(/\/$/, '')}/${endpoint}`;
+      break;
+      case 
+        'auth': url = `${this.authUrlBase.replace(/\/$/, '')}/${endpoint}`;
+      break;
+    } 
+    return url;
   }
 
   /**
    * Maneja errores de las peticiones HTTP
    */
   private handleError(error: HttpErrorResponse): never {
-    console.log("EROR: ", error);
     let errorMessage = 'Ha ocurrido un error inesperado';
 
     if (error.error instanceof ErrorEvent) {
@@ -151,11 +158,13 @@ export class HttpRequestService {
 
     console.error('Error en petición HTTP:', errorMessage);
     
-    // Muestra el diálogo de error
     // Muestra el diálogo de error - usa setTimeout para evitar problemas de detección de cambios
-    setTimeout(() => {
-      this.messageService.showError(errorMessage).subscribe();
-    }, 0);
+     // No mostrar diálogo de error para errores 401 (manejados por el interceptor)
+    if (error.status !== 401) {
+      setTimeout(() => {
+        this.messageService.showError(errorMessage).subscribe();
+      }, 0);
+    }
     
     // console.error('Error en petición HTTP:', errorMessage);
     throw new Error(errorMessage);

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { NavItem } from '../../interfaces';
 import { MenuOption } from '../../interfaces/models';
-import { Observable, map, of, delay } from 'rxjs';
 import { HttpRequestService } from '../http-request/http-request.service';
+import { ConstantsEndpoints } from '../../constants/constants-endpoints';
 
+const userMicroService = ConstantsEndpoints.USER_MICROSERVICE;
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +15,7 @@ export class MenuOptionService {
   getMenuItems(roleCode: string): Promise<NavItem[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        let menuOptions = await this.httpRequestService.get(`user/menu-options`) as MenuOption[];
+        let menuOptions = await this.httpRequestService.get(userMicroService,`user/menu-options/${roleCode}`) as MenuOption[];
         const activeItems = this.filterActiveItems(menuOptions);
         const navItems = this.convertToNavItems(activeItems);
 
@@ -28,7 +29,14 @@ export class MenuOptionService {
   private filterActiveItems(menuOptions: MenuOption[]): MenuOption[] {
     return menuOptions.filter(option => 
       option.isActive
-    );
+    ).sort((a, b) => {
+      const aIsHome = a.menuOptionCode === "HOME";
+      const bIsHome = b.menuOptionCode === "HOME";
+      
+      if (aIsHome && !bIsHome) return -1;
+      if (!aIsHome && bIsHome) return 1;
+      return 0;
+    });
   }
 
   private convertToNavItems(menuOptions: MenuOption[]): NavItem[] {
@@ -93,7 +101,7 @@ export class MenuOptionService {
       'DASHBOARD': 'dashboard',
       'ROLES': 'assignment_ind',
       'USERS': 'account_circle', 
-      'INCIDENTES': 'warning',
+      'CATALOGS': 'view_list',
       'LISTA_INCIDENTES': 'list',
       'NUEVO_INCIDENTE': 'add_circle',
       'USUARIOS': 'people',

@@ -27,12 +27,12 @@ export class GenericDialogComponent {
 
   getButtonColor(): string {
     switch (this.data.type) {
-      case 'error': return 'warn';
-      case 'success': return 'primary';
-      case 'warning': return 'accent';
-      case 'info': return 'primary';
-      case 'confirm': return 'primary';
-      default: return 'primary';
+      case 'error': return 'error-button';
+      case 'success': return 'success-button';
+      case 'warning': return 'warning-button';
+      case 'info': return 'info-button';
+      case 'confirm': return 'confirm-button';
+      default: return 'primary-button';
     }
   }
 

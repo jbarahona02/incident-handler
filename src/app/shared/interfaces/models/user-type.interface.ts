@@ -4,5 +4,5 @@ export interface UserType {
     name: string;
     description: string;
     roleCode: string;
-    isActive: boolean;
+    isActive?: boolean;
 }
