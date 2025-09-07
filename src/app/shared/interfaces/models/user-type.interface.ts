@@ -1,3 +1,4 @@
+import { Role } from ".";
 
 export interface UserType {
     userTypeCode: string;
@@ -5,4 +6,5 @@ export interface UserType {
     description: string;
     roleCode: string;
     isActive?: boolean;
+    role?: Role
 }

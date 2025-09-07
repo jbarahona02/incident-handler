@@ -7,8 +7,9 @@ export enum ADMIN_PAGES {
     HOME = 'home',
     DASHBOARD = 'dashboard',
     INCIDENTES = 'incidentes',
-    USERS = 'usuarios',
-    ROLES = 'roles'
+    USERS = 'users',
+    ROLES = 'roles',
+    USER_TYPES = 'user-types'
 }
 
 const adminItems: NavItem[] = [
@@ -32,11 +33,15 @@ export const ADMIN_ROUTES: Routes = [
             },
             {
                 path: ADMIN_PAGES.HOME,
-                loadComponent: () => import('./pages/home-admin/home-admin.page').then(c => c.HomeAdminPage)
+                loadComponent: () => import('./pages/home-admin/home-admin.page').then(p => p.HomeAdminPage)
             },
             {
                 path: ADMIN_PAGES.ROLES,
-                loadComponent: () => import('./pages/catalogs/role/role.component').then(c => c.RoleComponent)
+                loadComponent: () => import('./pages/catalogs/role/role.page').then(p => p.RolePage)
+            },
+            {
+                path: ADMIN_PAGES.USER_TYPES,
+                loadComponent: () => import('./pages/catalogs/user-type/user-type.page').then(p => p.UserTypePage)
             }
         ]
     },

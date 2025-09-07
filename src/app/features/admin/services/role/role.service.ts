@@ -20,11 +20,15 @@ export class RoleService {
   }
 
   async getAllRoles() : Promise<Role[]> {
-    try {
-      return await this.httpResquestService.get(userMicroService,AdminEndpoints.ALL_ROLES);
-    } catch (err) {
-      return [];
-    }
+    return new Promise<Role[]>((resolve,reject)=>{
+      this.httpResquestService.get<Role[]>(userMicroService,AdminEndpoints.ALL_ROLES)
+        .then((data:Role[]) =>{
+          resolve(data);
+        })
+        .catch(err =>{
+          reject(err);
+        })
+    });
   } 
 
   transformAndReorder(data : Role[], fieldOrder = ['id','name','description','isActive']) : TransformObject[] {
@@ -51,7 +55,7 @@ export class RoleService {
     });
   }
 
-  async createRole(newRole : Role) {
+  async createRole(newRole : Role) : Promise<Role> {
 
     let body = {
       roleCode : newRole.roleCode,
@@ -59,20 +63,40 @@ export class RoleService {
       description: newRole.description
     };
 
-    return await this.httpResquestService.post(userMicroService,AdminEndpoints.ROLE,body);
+    return new Promise<Role>((resolve,reject)=>{
+      this.httpResquestService.post<Role>(userMicroService,AdminEndpoints.ROLE,body)
+        .then((data:Role) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject(err);
+        })
+    });
   }
 
-  async deleteRole(roleCode: string) {
-    return await this.httpResquestService.delete(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`);
+  async deleteRole(roleCode: string) : Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.httpResquestService.delete<void>(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`)
+        .then(() => {
+          resolve();
+        })
+        .catch(err => {
+          reject(err);
+        })
+    });
   }
 
-  async updateRole(roleCode: string, updateRole : Role) {
+  async updateRole(roleCode: string, updateRole : Role) : Promise<Role> {
     let body = {
       name: updateRole.name,
       description: updateRole.description,
       isActive: updateRole.isActive
     };
     
-    return await this.httpResquestService.put(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`,body);
+    return new Promise<Role>((resolve, reject) =>{
+      this.httpResquestService.put<Role>(userMicroService,`${AdminEndpoints.ROLE}/${roleCode}`,body)
+        .then((data:Role) => resolve(data))
+        .catch(err => reject(err));
+    });
   }
 }
