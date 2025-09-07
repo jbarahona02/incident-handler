@@ -19,10 +19,22 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
   @Input() step: number | null = null;
   @Input() options: any[] = [];
   
-  value: any;
-  onChange: any = () => {};
+  private _value: any;
+  onChange: (value: any) => void = () => {};
   onTouched: any = () => {};
   
+  get value(): any {
+    return this._value;
+  }
+  
+  set value(val: any) {
+    if (val !== this._value) {
+      this._value = val;
+      // IMPORTANTE: Llamar a onChange con el nuevo valor
+      this.onChange(val);
+    }
+  }
+
   constructor(@Optional() @Self() public ngControl: NgControl) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
@@ -34,7 +46,10 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    this.value = value;
+    // Solo actualizar si el valor es diferente
+    if (value !== this._value) {
+      this._value = value;
+    }
   }
 
   registerOnChange(fn: any): void {

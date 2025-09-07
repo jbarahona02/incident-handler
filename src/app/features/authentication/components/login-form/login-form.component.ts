@@ -83,7 +83,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     try {
       // this.router.navigate(["admin","home"]);
       if (this.loginForm.valid) {
-        console.log('Formulario enviado:', this.loginForm.value);
       
         const loginResponse : LoginResponse =  await this.loginService.login(this.loginForm.value);
 

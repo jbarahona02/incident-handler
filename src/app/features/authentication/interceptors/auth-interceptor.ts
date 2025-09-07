@@ -5,17 +5,16 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse,
-  HttpResponse
+  HttpErrorResponse
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject, from } from 'rxjs';
-import { catchError, filter, take, switchMap, tap } from 'rxjs/operators';
+import { catchError, filter, take, switchMap, tap, finalize } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth/auth-service';
 import { HttpRequestService } from '../../../shared/services/http-request/http-request.service';
 import { ConstantsEndpoints } from '../../../shared/constants/constants-endpoints';
 import { MessageService } from '../../../shared/services/message-service/message.service';
-
+import { LoaderService } from '../../../shared/services/loader/loader.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -26,13 +25,29 @@ export class AuthInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private httpRequestService: HttpRequestService,
     private router: Router,
-    private messageService : MessageService
+    private messageService: MessageService,
+    private loaderService: LoaderService
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Si es una petición de login o refresh token, no añadir el token
-    if (request.url.includes('/auth/login') || request.url.includes('/auth/refresh')) {
-      return next.handle(request);
+    // Determinar si es una petición de auth (no mostrar loader para estas)
+    const isAuthRequest = request.url.includes('/auth/login') || request.url.includes('/auth/refresh');
+    
+    // Mostrar loader solo para peticiones que no son de autenticación
+    if (!isAuthRequest) {
+      this.loaderService.show();
+    }
+
+    // Si es una petición de auth, no añadir el token y manejar sin loader
+    if (isAuthRequest) {
+      return next.handle(request).pipe(
+        finalize(() => {
+          // Ocultar loader si por alguna razón se mostró
+          if (!isAuthRequest) {
+            this.loaderService.hide();
+          }
+        })
+      );
     }
 
     // Añadir token a la petición si está disponible y no ha expirado
@@ -52,6 +67,12 @@ export class AuthInterceptor implements HttpInterceptor {
           return throwError(() => error);
         } else {
           return throwError(() => error);
+        }
+      }),
+      finalize(() => {
+        // Ocultar loader cuando la petición termine (éxito o error)
+        if (!isAuthRequest) {
+          this.loaderService.hide();
         }
       })
     );
@@ -88,6 +109,10 @@ export class AuthInterceptor implements HttpInterceptor {
           this.isRefreshing = false;
           this.redirectToLogin();
           return throwError(() => error);
+        }),
+        finalize(() => {
+          // Asegurarse de ocultar el loader incluso en errores de refresh
+          this.loaderService.hide();
         })
       );
     } else {
@@ -97,6 +122,9 @@ export class AuthInterceptor implements HttpInterceptor {
         take(1),
         switchMap(token => {
           return next.handle(this.addToken(request, token));
+        }),
+        finalize(() => {
+          this.loaderService.hide();
         })
       );
     }
@@ -138,5 +166,8 @@ export class AuthInterceptor implements HttpInterceptor {
     
     // Opcional: Mostrar mensaje al usuario
     this.messageService.showError('Su sesión ha expirado. Por favor, inicie sesión nuevamente.');
+    
+    // Asegurarse de ocultar el loader al redirigir
+    this.loaderService.hide();
   }
 }

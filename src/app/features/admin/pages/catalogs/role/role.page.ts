@@ -10,10 +10,10 @@ import { MessageService } from '../../../../../shared/services/message-service/m
 @Component({
   selector: 'app-role',
   imports: [ CommonModule, ReactiveFormsModule, DataTableComponent, TextInputComponent, TextareaInputComponent, CheckboxInputComponent],
-  templateUrl: './role.component.html',
-  styleUrl: './role.component.scss'
+  templateUrl: './role.page.html',
+  styleUrl: './role.page.scss'
 })
-export class RoleComponent {
+export class RolePage {
   roleForm: FormGroup;
 
   allRoles: Role[] = [];
@@ -31,7 +31,9 @@ export class RoleComponent {
     private messageService : MessageService
   ){
      this.roleForm = this.formGroup.group({
-      roleCode: ['', [
+      roleCode: [{
+        value: '', disabled: false
+      }, [
         Validators.required,
         Validators.maxLength(10)
       ]],
@@ -43,7 +45,7 @@ export class RoleComponent {
         Validators.required,
         Validators.maxLength(50)
       ]],
-      isActive: [{value: true, disabled: this.isAddRole}]
+      isActive: [{value: true}]
     });
   }
 
@@ -76,7 +78,9 @@ export class RoleComponent {
       name: role?.name || '',
       description: role?.description || '',
       isActive: role?.isActive
-    })
+    });
+
+    this.roleForm.get('roleCode')?.disable();
 
     this.isEditRole = true;
 
@@ -104,6 +108,7 @@ export class RoleComponent {
           await this.roleService.createRole(this.roleForm.value);
           this.messageService.showSuccess("Rol agregado con éxito.","Rol").subscribe();
         } else {
+           this.roleForm.get('roleCode')?.enable();
            await this.roleService.updateRole(this.roleForm.value['roleCode'],this.roleForm.value);
            this.messageService.showSuccess("Rol actualizado con éxito.","Rol").subscribe();
         }
@@ -114,6 +119,7 @@ export class RoleComponent {
         this.isAddRole = false;
         this.isEditRole = false;
       } catch(err) {
+        if(this.isEditRole) this.roleForm.get('roleCode')?.disable();
         this.isLoading = false;
       }
     } else {
@@ -157,9 +163,8 @@ export class RoleComponent {
   }
 
   cleanValuesOfForm(){
-    this.roleForm.reset({
-      isActive: true
-    });
+    this.roleForm.reset({});
+    this.roleForm.get('roleCode')?.enable();
   }
 
   ngOnChanges() {
