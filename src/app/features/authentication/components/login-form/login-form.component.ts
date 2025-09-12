@@ -7,6 +7,7 @@ import { Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../../admin/services/login/login.service';
 import { AuthService } from '../../services/auth/auth-service';
 import { LoginResponse } from '../../interfaces';
+import { ROLES } from '../../../../shared/constants/enums';
 
 @Component({
   selector: 'app-login-form',
@@ -81,10 +82,10 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   async submit() {
     try {
-      // this.router.navigate(["admin","home"]);
       if (this.loginForm.valid) {
       
         const loginResponse : LoginResponse =  await this.loginService.login(this.loginForm.value);
+        const role = this.loginService.parseJWT(loginResponse.accessToken).role;
 
          // Guardar los tokens usando el AuthService
         this.authService.setTokens(
@@ -93,9 +94,12 @@ export class LoginFormComponent implements OnInit, OnDestroy {
           loginResponse.expiresIn,
           loginResponse.refreshExpiresIn
         );
-
-        // Aquí puedes hacer la llamada al backend
-        this.router.navigate(["admin","home"]);
+       
+        switch(role) {
+          case ROLES.ADMIN: 
+             this.router.navigate(["admin","home"]);
+          break;
+        }
       } else {
         // Marcar todos los campos como tocados para mostrar errores
         Object.keys(this.loginForm.controls).forEach(key => {

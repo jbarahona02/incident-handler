@@ -10,3 +10,7 @@ export enum INCIDENT_STATUS {
     IN_PROGRESS = "En progreso",
     DONE = "Resuelto"
 }
+
+export enum ROLES {
+    ADMIN = "ADMIN",
+}
