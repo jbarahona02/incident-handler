@@ -20,6 +20,14 @@ export class LoginService {
   async login(body: bodyLogin) : Promise<LoginResponse> {
     return await this.httpRequestService.post(authMicroService,AuthConstants.LOGIN,body) as LoginResponse;
   }
+
+  parseJWT(token : string) {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 interface bodyLogin {
