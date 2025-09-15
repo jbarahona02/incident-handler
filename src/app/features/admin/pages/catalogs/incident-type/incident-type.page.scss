@@ -1,0 +1,43 @@
+@use '../../../../../shared/styles/variables.scss' as vars;
+
+.primary-color {
+  background-color: vars.$primary-color;
+}
+
+
+@media (max-width: 768px) {
+  :host {
+    margin: 0.5rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  :host {
+    margin: 0.25rem;
+    padding: 0 0.25rem;
+  }
+}
+
+// Mejoras visuales
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+// Efectos de focus mejorados
+input:focus, textarea:focus {
+  outline: none;
+}
+
+// Animaciones suaves
+.transition-all {
+  transition: all 0.2s ease-in-out;
+}

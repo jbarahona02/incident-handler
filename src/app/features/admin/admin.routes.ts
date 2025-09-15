@@ -9,7 +9,9 @@ export enum ADMIN_PAGES {
     INCIDENTES = 'incidentes',
     USERS = 'users',
     ROLES = 'roles',
-    USER_TYPES = 'user-types'
+    USER_TYPES = 'user-types',
+    INCIDENT_TYPES = 'inci-types',
+    INCIDENT_PRIORITY_LEVEL = 'inci-level'
 }
 
 const adminItems: NavItem[] = [
@@ -42,6 +44,14 @@ export const ADMIN_ROUTES: Routes = [
             {
                 path: ADMIN_PAGES.USER_TYPES,
                 loadComponent: () => import('./pages/catalogs/user-type/user-type.page').then(p => p.UserTypePage)
+            },
+            {
+                path: ADMIN_PAGES.INCIDENT_TYPES,
+                loadComponent: () => import('./pages/catalogs/incident-type/incident-type.page').then(p => p.IncidentTypePage)
+            }, 
+            {
+                path: ADMIN_PAGES.INCIDENT_PRIORITY_LEVEL,
+                loadComponent: () => import('./pages/catalogs/incident-priority-level/incident-priority-level.page').then(p => p.IncidentPriorityLevelPage)
             }
         ]
     },
