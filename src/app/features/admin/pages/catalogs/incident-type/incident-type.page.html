@@ -1,0 +1,96 @@
+@if (!isLoading && !isAddIncidentType && !isEditIncidentType) {
+    <app-data-table 
+        [title]="'Tipos de incidente'" [headers]="headers" [data]="incidentTypesToView"
+        (clickOnAdd)="addIncidentType()"
+        (clickOnEdit)="editIncidentType($event)"
+        (clickOnDelete)="deleteIncidentType($event)"
+    ></app-data-table>
+} 
+
+@if(isAddIncidentType || isEditIncidentType) {
+    <div class="mt-10 mr-10 mx-auto bg-white rounded-lg shadow-md">
+        <!-- Header -->
+        <div class="primary-color text-white px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl md:text-2xl font-bold">{{ isAddIncidentType ? 'Agregar nuevo tipo de incidente' : 'Editar tipo de incidente'}}</h2>
+            <p class="text-white-100 text-sm mt-1">Complete todos los campos obligatorios (*)</p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="incidentTypeForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+                    <!-- Código de Rol -->
+                    <app-text-input
+                        label="Código de tipo de incidente"
+                        formControlName="incidentTypeCode"
+                        [required]="true"
+                        [maxLength]="10"
+                        placeholder="Ej: TECH, ADMIN"
+                        [errorMessages]="{
+                            'required': 'El código del tipo de incidente es obligatorio',
+                            'maxlength': 'Máximo 10 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+
+                    <!-- Nombre -->
+                    <app-text-input
+                        label="Nombre del tipo de incidente"
+                        formControlName="name"
+                        [required]="true"
+                        [maxLength]="25"
+                        placeholder="Ej: Incidente técnico,  incidente administrativo"
+                        [errorMessages]="{
+                            'required': 'El nombre es obligatorio',
+                            'maxlength': 'Máximo 25 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+                </div>
+
+                <!-- Columna Derecha - Descripción y estado -->
+                <div class="space-y-6">
+                    <!-- Descripción -->
+                    <app-textarea-input
+                        label="Descripción del tipo de incidente"
+                        formControlName="description"
+                        [required]="true"
+                        [maxLength]="50"
+                        placeholder="Describa las características del tipo de incidente"
+                        [rows]="5"
+                        [errorMessages]="{
+                            'required': 'La descripción es obligatoria',
+                            'maxlength': 'Máximo 50 caracteres permitidos'
+                        }"
+                    ></app-textarea-input>
+
+                    <!-- Estado Activo/Inactivo -->
+                    @if (!isAddIncidentType) {
+                        <app-checkbox-input
+                            label="Estado"
+                            formControlName="isActive"
+                            [errorMessages]="{}"
+                        ></app-checkbox-input>
+                    }
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button
+                    type="button"
+                    (click)="onCancel()"
+                    class="flex-1 sm:flex-none px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+                >
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    [disabled]="incidentTypeForm.invalid && !isLoading"
+                    class="flex-1 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+}

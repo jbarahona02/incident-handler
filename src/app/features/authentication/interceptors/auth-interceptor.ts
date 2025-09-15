@@ -107,6 +107,19 @@ export class AuthInterceptor implements HttpInterceptor {
         }),
         catchError((error) => {
           this.isRefreshing = false;
+          
+          // Verificar si es el error específico de refresh token expirado
+          if (this.isRefreshTokenExpiredError(error)) {
+            // Convertir a 401 y cerrar sesión
+            this.redirectToLogin();
+            return throwError(() => new HttpErrorResponse({
+              error: error.error,
+              status: 401,
+              statusText: 'Unauthorized',
+              url: error.url
+            }));
+          }
+          
           this.redirectToLogin();
           return throwError(() => error);
         }),
@@ -152,9 +165,26 @@ export class AuthInterceptor implements HttpInterceptor {
 
       return response;
     } catch (error) {
-      console.error('Error refreshing token:', error);
+      
+      // Si es el error específico de refresh token expirado, lanzar un error con status 401
+      if (this.isRefreshTokenExpiredError(error as ErrorApi)) {
+        throw new HttpErrorResponse({
+          error: error,
+          status: 401,
+          statusText: 'Unauthorized',
+          url:""
+        });
+      }
+      
       throw error;
     }
+  }
+
+  private isRefreshTokenExpiredError(error: ErrorApi): boolean {
+    // Verificar si el error es específicamente de refresh token expirado
+    return error && 
+           error.error && 
+           error.error.type === 'AUTH.RefreshTokenHasExpired';
   }
 
   private redirectToLogin(): void {
@@ -169,5 +199,15 @@ export class AuthInterceptor implements HttpInterceptor {
     
     // Asegurarse de ocultar el loader al redirigir
     this.loaderService.hide();
+  }
+}
+
+interface ErrorApi {
+  error : {
+    type: string,
+    message: string,
+    timestamp: string,
+    path: string,
+    method: string
   }
 }
