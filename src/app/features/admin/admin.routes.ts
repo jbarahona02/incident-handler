@@ -17,7 +17,7 @@ export enum ADMIN_PAGES {
 const adminItems: NavItem[] = [
     { 
         path: ADMIN_PAGES.HOME, 
-        label: 'Inicio', 
+        label: 'Incidentes', 
         icon: 'home' 
     }
 ];

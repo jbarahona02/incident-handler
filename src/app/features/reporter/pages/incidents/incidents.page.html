@@ -1,0 +1,89 @@
+<div class="p-4 md:p-6 relative">
+  <!-- Título y Controles -->
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 md:mb-6 gap-2">
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800">Incidentes</h1>
+
+    <div class="flex flex-col sm:flex-row gap-2 order-3 md:order-none mt-2 md:mt-0">
+      <button 
+        class="px-3 py-2 md:px-4 md:py-2 bg-blue-900 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
+        (click)="addIncident()"
+        >
+        <span class="material-icons-outlined mr-1 text-sm md:text-base">add</span>
+        <span class="text-sm md:text-base">Agregar</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-2 mr-10 mx-auto">
+        <!-- Header -->
+        <h2 class="text-xl md:text-2xl font-bold">Filtros de búsqueda</h2>
+        <!-- Formulario -->
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-1 lg:gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+                   <app-select-input
+                        label="Estado de incidente"
+                        formControlName="status"
+                        [required]="false"
+                        [options]="allIncidentStatus"
+                        optionValue="value"
+                        optionLabel="label"
+                        placeholder="Selecciona el estado"
+                        [errorMessages]="{
+                            'required': 'El rol es obligatorio'
+                        }"
+                    ></app-select-input>
+                </div>
+                <div class="space-y-6">
+                     <app-date-input
+                        formControlName="reportedDate"
+                        label="Fecha de creación"
+                        placeholder="Selecciona la fecha de creación"
+                        [minDate]="'1900-01-01'"
+                        [maxDate]="getCurrentDate()"
+                        [errorMessages]="{
+                        max: 'La fecha no puede ser futura'
+                        }"
+                        class="block mb-4">
+                    </app-date-input>
+                    <app-date-input
+                        formControlName="completedDate"
+                        label="Fecha en que se completo"
+                        placeholder="Selecciona la fecha en que se completo"
+                        [minDate]="'1900-01-01'"
+                        [maxDate]="getCurrentDate()"
+                        [errorMessages]="{
+                        max: 'La fecha no puede ser futura'
+                        }"
+                        class="block mb-4">
+                    </app-date-input>
+                </div>
+                <div class="space-y-1">
+                   
+                    <button
+                        type="submit"
+                        class="flex-1 lg:mt-5 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                        Buscar
+                    </button>
+                   
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="mt-0 mr-10 mx-auto">
+        <!-- Título y controles -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Historial de Incidentes</h2>
+        </div>
+
+        <!-- Grid de Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Card de Incidente -->
+            @for (incident of incidents; track incident.incidentId) {
+            <app-incident-card [incident]="incident"></app-incident-card>
+            }
+        </div>
+    </div>
+</div>
