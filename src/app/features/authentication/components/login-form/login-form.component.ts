@@ -99,6 +99,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
           case ROLES.ADMIN: 
              this.router.navigate(["admin","home"]);
           break;
+          case ROLES.REPORTER:
+             this.router.navigate(["reporter","home"]);
+          break;
         }
       } else {
         // Marcar todos los campos como tocados para mostrar errores

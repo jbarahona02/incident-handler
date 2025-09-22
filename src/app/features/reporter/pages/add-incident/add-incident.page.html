@@ -1,0 +1,76 @@
+<div class="mt-10 mr-10 mx-auto bg-white rounded-lg shadow-md">
+        <!-- Header -->
+        <div class="primary-color text-white px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl md:text-2xl font-bold">Agregar incidente</h2>
+            <p class="text-white-100 text-sm mt-1">Complete todos los campos obligatorios (*)</p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+                    <app-select-input
+                        label="Tipo de incidente"
+                        formControlName="incidentTypeCode"
+                        [required]="true"
+                        [options]="incidentTypes"
+                        optionValue="incidentTypeCode"
+                        optionLabel="name"
+                        placeholder="Selecciona el tipo de incidente"
+                        [errorMessages]="{
+                            'required': 'El tipo de incidente es obligatorio'
+                        }"
+                    ></app-select-input>
+
+                    <app-select-input
+                        label="Prioridad de incidente"
+                        formControlName="incidentPriorityLevelCode"
+                        [required]="true"
+                        [options]="incidentPriorityLevel"
+                        optionValue="incidentPriorityLevelCode"
+                        optionLabel="name"
+                        placeholder="Selecciona el nivel de prioridad"
+                        [errorMessages]="{
+                            'required': 'El nivel de prioridad es obligatorio'
+                        }"
+                    ></app-select-input>
+                </div>
+
+                <!-- Columna Derecha -->
+                <div class="space-y-6">
+                    <!-- Descripción -->
+                    <app-textarea-input
+                        label="Descripción del incidente"
+                        formControlName="description"
+                        [required]="true"
+                        [maxLength]="50"
+                        placeholder="Describa las características del incidente"
+                        [rows]="5"
+                        [errorMessages]="{
+                            'required': 'La descripción es obligatoria',
+                            'maxlength': 'Máximo 50 caracteres permitidos'
+                        }"
+                    ></app-textarea-input>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button
+                    type="button"
+                    (click)="onCancel()"
+                    class="flex-1 sm:flex-none px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+                >
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    [disabled]="incidentForm.invalid"
+                    class="flex-1 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>

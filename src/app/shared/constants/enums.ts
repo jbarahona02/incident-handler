@@ -13,4 +13,5 @@ export enum INCIDENT_STATUS {
 
 export enum ROLES {
     ADMIN = "ADMIN",
+    REPORTER = "REPORTER"
 }
