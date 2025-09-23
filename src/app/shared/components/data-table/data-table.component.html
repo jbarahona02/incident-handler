@@ -49,14 +49,16 @@
                     <span class="material-icons-outlined text-xl">edit</span>
                 </button>
                 
-                <!-- Botón de eliminar -->
-                <button 
-                    class="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-50 transition-colors transform hover:scale-110"
-                    (click)="deleteRecord(record)"
-                    title="Eliminar"
-                >
-                    <span class="material-icons-outlined text-xl">delete</span>
-                </button>
+                @if(showDeleteIcon){
+                  <!-- Botón de eliminar -->
+                  <button 
+                      class="text-red-600 hover:text-red-800 p-2 rounded-full hover:bg-red-50 transition-colors transform hover:scale-110"
+                      (click)="deleteRecord(record)"
+                      title="Eliminar"
+                  >
+                      <span class="material-icons-outlined text-xl">delete</span>
+                  </button>
+                }
                 </div>
             </td>
           </tr>

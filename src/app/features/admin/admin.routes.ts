@@ -52,6 +52,10 @@ export const ADMIN_ROUTES: Routes = [
             {
                 path: ADMIN_PAGES.INCIDENT_PRIORITY_LEVEL,
                 loadComponent: () => import('./pages/catalogs/incident-priority-level/incident-priority-level.page').then(p => p.IncidentPriorityLevelPage)
+            },
+            {
+                path: ADMIN_PAGES.USERS,
+                loadComponent: () => import('./pages/catalogs/user/user.component').then(p => p.UserPage)
             }
         ]
     },

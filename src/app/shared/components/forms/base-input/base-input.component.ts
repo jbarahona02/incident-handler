@@ -95,7 +95,7 @@ export abstract class BaseInputComponent implements ControlValueAccessor {
       return this.errorMessages['pattern'] || 'El formato no es válido';
     }
     
-    return this.errorMessages['default'] || 'Error de validación';
+    return this.errorMessages['default'] || 'Este campo es obligatorio';
   }
 
   // Método genérico para manejar cambios de input

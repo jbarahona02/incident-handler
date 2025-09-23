@@ -7,6 +7,7 @@ import { TransformObject } from '../../../../../shared/interfaces';
 import { UserTypeService } from '../../../services/user-type/user-type.service';
 import { MessageService } from '../../../../../shared/services/message-service/message.service';
 import { RoleService } from '../../../services/role/role.service';
+import { noWhitespaceValidator } from '../../../../../shared/utils/common-functions';
 
 @Component({
   selector: 'app-user-type',
@@ -36,15 +37,18 @@ export class UserTypePage {
      this.userTypeForm = this.formGroup.group({
       userTypeCode: [{value: '', disabled : false}, [
         Validators.required,
-        Validators.maxLength(10)
+        Validators.maxLength(10),
+        noWhitespaceValidator
       ]],
       name: ['', [
         Validators.required,
-        Validators.maxLength(25)
+        Validators.maxLength(25),
+        noWhitespaceValidator
       ]],
       description: ['', [
         Validators.required,
-        Validators.maxLength(50)
+        Validators.maxLength(50),
+        noWhitespaceValidator
       ]],
       isActive: [{value: true }],
       roleCode: ['', Validators.required]
@@ -89,7 +93,7 @@ export class UserTypePage {
 
       // se desactiva la opción de editar el campo código de tipo de usuario
       this.userTypeForm.get('userTypeCode')?.disable();
-
+      this.userTypeForm.get('roleCode')?.disable();
       this.isEditUserType = true;
 
       this.changeDetectorRef.detectChanges();
@@ -122,6 +126,7 @@ export class UserTypePage {
           this.messageService.showSuccess("Tipo de usuario agregado con éxito.","Tipo de usuario").subscribe();
         } else {
            this.userTypeForm.get('userTypeCode')?.enable();
+           this.userTypeForm.get('roleCode')?.enable();
            await this.userTypeService.updateUserType(this.userTypeForm.value['userTypeCode'],this.userTypeForm.value);
            this.messageService.showSuccess("Tipo de usuario actualizado con éxito.","Tipo de usuario").subscribe();
         }
@@ -132,7 +137,10 @@ export class UserTypePage {
         this.isAddUserType = false;
         this.isEditUserType = false;
       } catch(err) {
-        if (this.isEditUserType) this.userTypeForm.get('userTypeCode')?.disable();
+        if (this.isEditUserType) {
+          this.userTypeForm.get('userTypeCode')?.disable();
+          this.userTypeForm.get('roleCode')?.disable();
+        }
         this.isLoading = false;
       }
     } else {
@@ -180,6 +188,7 @@ export class UserTypePage {
       roleCode: ''
     });
     this.userTypeForm.get('userTypeCode')?.enable();
+    this.userTypeForm.get('roleCode')?.enable();
   }
 
   ngOnChanges() {

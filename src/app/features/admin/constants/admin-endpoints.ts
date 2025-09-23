@@ -10,5 +10,7 @@ export const AdminEndpoints = {
     ALL_INCIDENT_TYPES: `${microServiceIncident}/type-list`,
     INCIDENT_TYPES: `${microServiceIncident}/type`,
     ALL_INCIDENT_PRIORITY_LEVEL: `${microServiceIncident}/priority-level-list`,
-    INCIDENT_PRIORITY_LEVEL: `${microServiceIncident}/priority-level`
+    INCIDENT_PRIORITY_LEVEL: `${microServiceIncident}/priority-level`,
+    ALL_USERS : `${microServiceUser}`,
+    USER : `${microServiceUser}`,
 }
