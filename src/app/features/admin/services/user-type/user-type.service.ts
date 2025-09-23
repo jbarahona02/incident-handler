@@ -62,7 +62,9 @@ export class UserTypeService {
         userTypeCode : newUserType.userTypeCode,
         name: newUserType.name,
         description: newUserType.description,
-        roleCode: newUserType.roleCode
+        roleCode: newUserType.roleCode,
+        isAdmin: newUserType.roleCode == "ADMIN",
+        isTechnical: newUserType.roleCode == "TECH"
       };
   
       return new Promise<UserType>((resolve,reject) => {
@@ -94,6 +96,8 @@ export class UserTypeService {
         description: userType.description,
         roleCode: userType.roleCode,
         isActive: userType.isActive,
+        isAdmin: userType.roleCode == "ADMIN",
+        isTechnical: userType.roleCode == "TECH"
       };
       
       return new Promise<UserType>((resolve,reject)=>{

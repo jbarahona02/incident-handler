@@ -14,6 +14,7 @@ export class DataTableComponent implements OnChanges {
   @Input() headers : string[] = [];
   @Input() data : TransformObject[] = [];
   @Input() title : string = "";
+  @Input() showDeleteIcon: boolean = true;
   @Output() clickOnAdd : EventEmitter<void> = new EventEmitter<void>();
   @Output() clickOnEdit : EventEmitter<TransformObject> = new EventEmitter<TransformObject>();
   @Output() clickOnDelete : EventEmitter<TransformObject> = new EventEmitter<TransformObject>();

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CheckboxInputComponent, DataTableComponent, TextareaInputComponent, TextInputComponent } from '../../../../../shared/components';
 import { MessageService } from '../../../../../shared/services/message-service/message.service';
+import { noWhitespaceValidator } from '../../../../../shared/utils/common-functions';
 
 @Component({
   selector: 'app-role',
@@ -35,15 +36,18 @@ export class RolePage {
         value: '', disabled: false
       }, [
         Validators.required,
-        Validators.maxLength(10)
+        Validators.maxLength(10),
+        noWhitespaceValidator
       ]],
       name: ['', [
         Validators.required,
-        Validators.maxLength(25)
+        Validators.maxLength(25),
+        noWhitespaceValidator
       ]],
       description: ['', [
         Validators.required,
-        Validators.maxLength(50)
+        Validators.maxLength(50),
+        noWhitespaceValidator
       ]],
       isActive: [{value: true}]
     });

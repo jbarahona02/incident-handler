@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CheckboxInputComponent, DataTableComponent, TextareaInputComponent, TextInputComponent } from '../../../../../shared/components';
 import { IncidentPriorityLevel } from '../../../../../shared/interfaces/models';
 import { TransformObject } from '../../../../../shared/interfaces';
 import { IncidentPriorityLevelService } from '../../../services/incident-priority-level/incident-priority-level.service';
 import { MessageService } from '../../../../../shared/services/message-service/message.service';
+import { noWhitespaceValidator } from '../../../../../shared/utils/common-functions';
 
 @Component({
   selector: 'app-incident-priority-level',
@@ -42,15 +43,18 @@ export class IncidentPriorityLevelPage {
         value: '', disabled: false
       }, [
         Validators.required,
-        Validators.maxLength(10)
+        Validators.maxLength(10),
+        noWhitespaceValidator
       ]],
       name: ['', [
         Validators.required,
-        Validators.maxLength(25)
+        Validators.maxLength(25),
+        noWhitespaceValidator
       ]],
       description: ['', [
         Validators.required,
-        Validators.maxLength(50)
+        Validators.maxLength(50),
+        noWhitespaceValidator
       ]],
       isActive: [{value: true}]
     });
