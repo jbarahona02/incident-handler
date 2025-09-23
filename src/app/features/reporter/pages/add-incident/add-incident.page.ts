@@ -6,6 +6,7 @@ import { IncidentTypeService } from '../../../admin/services/incident-type/incid
 import { IncidentPriorityLevelService } from '../../../admin/services/incident-priority-level/incident-priority-level.service';
 import { IncidentPriorityLevel, IncidentType } from '../../../../shared/interfaces/models';
 import { Router } from '@angular/router';
+import { noWhitespaceValidator } from '../../../../shared/utils/common-functions';
 
 @Component({
   selector: 'app-reporter-add-incident',
@@ -34,7 +35,8 @@ export class AddIncidentPage {
       incidentPriorityLevelCode: ['', Validators.required],
       description: ['', [
         Validators.required,
-        Validators.maxLength(50)
+        Validators.maxLength(50),
+        noWhitespaceValidator
       ]],
     });
   }

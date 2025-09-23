@@ -1,6 +1,7 @@
 
 const microServiceUser : string = "user";
 const microServiceIncident: string = "incident"
+const microServiceEquipment: string = "equipment";
 
 export const AdminEndpoints = {
     ALL_ROLES : `${microServiceUser}/role-all`,
@@ -13,4 +14,7 @@ export const AdminEndpoints = {
     INCIDENT_PRIORITY_LEVEL: `${microServiceIncident}/priority-level`,
     ALL_USERS : `${microServiceUser}`,
     USER : `${microServiceUser}`,
+    EQUIPMENT_LOCATION: `${microServiceEquipment}/equipment-location`,
+    EQUIPMENT_TYPE: `${microServiceEquipment}/equipment-type`,
+    EQUIPMENT: `${microServiceEquipment}/equipment`
 }

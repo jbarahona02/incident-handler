@@ -5,13 +5,14 @@ import { Sidebar } from "../../shared/components/sidebar/sidebar.component";
 /*ENUM que relaciona los menuOptionCode de la DB*/ 
 export enum ADMIN_PAGES {
     HOME = 'home',
-    DASHBOARD = 'dashboard',
-    INCIDENTES = 'incidentes',
     USERS = 'users',
     ROLES = 'roles',
     USER_TYPES = 'user-types',
     INCIDENT_TYPES = 'inci-types',
-    INCIDENT_PRIORITY_LEVEL = 'inci-level'
+    INCIDENT_PRIORITY_LEVEL = 'inci-level',
+    LOCATION = 'location',
+    EQUIPMENT_TYPE = 'equi-type',
+    EQUIPMENT = 'equipment'
 }
 
 const adminItems: NavItem[] = [
@@ -56,6 +57,18 @@ export const ADMIN_ROUTES: Routes = [
             {
                 path: ADMIN_PAGES.USERS,
                 loadComponent: () => import('./pages/catalogs/user/user.component').then(p => p.UserPage)
+            },
+            {
+                path: ADMIN_PAGES.LOCATION,
+                loadComponent: () => import('./pages/catalogs/equipment-location/equipment-location.page').then(p => p.EquipmentLocationPage)
+            },
+            {
+                path: ADMIN_PAGES.EQUIPMENT_TYPE,
+                loadComponent: () => import('./pages/catalogs/equipment-type/equipment-type.page').then(p => p.EquipmentTypePage)
+            },
+            {
+                path: ADMIN_PAGES.EQUIPMENT,
+                loadComponent: () => import('./pages/catalogs/equipment/equipment.page').then(p => p.EquipmentPage)
             }
         ]
     },

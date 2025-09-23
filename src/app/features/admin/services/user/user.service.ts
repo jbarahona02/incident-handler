@@ -116,6 +116,18 @@ export class UserService {
         })
     });
   }
+
+  async getAllTech() : Promise<UserApp[]> {
+    return new Promise<UserApp[]>((resolve, reject) => {
+      this.httpResquestService.get<UserApp[]>(userMicroService,`${AdminEndpoints.ALL_USERS}?isTechnician=true`)
+        .then((data: UserApp[]) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    })
+  } 
 }
 
 interface User {

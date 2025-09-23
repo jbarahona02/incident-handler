@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Opcion2AdminPage } from './opcion2-admin.page';
+import { EquipmentTypePage } from './equipment-type.page';
 
-describe('Opcion2AdminPage', () => {
-  let component: Opcion2AdminPage;
-  let fixture: ComponentFixture<Opcion2AdminPage>;
+describe('EquipmentTypePage', () => {
+  let component: EquipmentTypePage;
+  let fixture: ComponentFixture<EquipmentTypePage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Opcion2AdminPage]
+      imports: [EquipmentTypePage]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Opcion2AdminPage);
+    fixture = TestBed.createComponent(EquipmentTypePage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

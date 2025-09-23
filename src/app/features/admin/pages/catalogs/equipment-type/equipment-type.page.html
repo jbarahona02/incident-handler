@@ -1,0 +1,96 @@
+@if (!isLoading && !isAddEquipmentType && !isEditEquipmentType) {
+    <app-data-table 
+        [title]="'Tipo de equipos'" [headers]="headers" [data]="equipmentTypeToView"
+        (clickOnAdd)="addEquipmentType()"
+        (clickOnEdit)="editEquipmentType($event)"
+        (clickOnDelete)="deleteEquipmentType($event)"
+    ></app-data-table>
+} 
+
+@if(isAddEquipmentType || isEditEquipmentType) {
+    <div class="mt-10 mr-10 mx-auto bg-white rounded-lg shadow-md">
+        <!-- Header -->
+        <div class="primary-color text-white px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl md:text-2xl font-bold">{{ isAddEquipmentType ? 'Agregar nuevo tipo de equipo' : 'Editar tipo de equipo'}}</h2>
+            <p class="text-white-100 text-sm mt-1">Complete todos los campos obligatorios (*)</p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="equipmentTypeForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+                    <!-- Código de Rol -->
+                    <app-text-input
+                        label="Código"
+                        formControlName="equipmentTypeCode"
+                        [required]="true"
+                        [maxLength]="10"
+                        placeholder="Ej: EQ-1"
+                        [errorMessages]="{
+                            'required': 'El código del tipo de equipo es obligatorio',
+                            'maxlength': 'Máximo 10 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+
+                    <!-- Nombre -->
+                    <app-text-input
+                        label="Nombre"
+                        formControlName="name"
+                        [required]="true"
+                        [maxLength]="25"
+                        placeholder="Ej: Latops, Teclados"
+                        [errorMessages]="{
+                            'required': 'El nombre es obligatorio',
+                            'maxlength': 'Máximo 25 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+                </div>
+
+                <!-- Columna Derecha - Descripción y estado -->
+                <div class="space-y-6">
+                    <!-- Descripción -->
+                    <app-textarea-input
+                        label="Descripción del tipo de equipo"
+                        formControlName="description"
+                        [required]="true"
+                        [maxLength]="50"
+                        placeholder="Describa las características del tipo de equipo"
+                        [rows]="5"
+                        [errorMessages]="{
+                            'required': 'La descripción es obligatoria',
+                            'maxlength': 'Máximo 50 caracteres permitidos'
+                        }"
+                    ></app-textarea-input>
+
+                    <!-- Estado Activo/Inactivo -->
+                    @if (!isAddEquipmentType) {
+                        <app-checkbox-input
+                            label="Estado"
+                            formControlName="isActive"
+                            [errorMessages]="{}"
+                        ></app-checkbox-input>
+                    }
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button
+                    type="button"
+                    (click)="onCancel()"
+                    class="flex-1 sm:flex-none px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+                >
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    [disabled]="equipmentTypeForm.invalid && !isLoading"
+                    class="flex-1 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+}

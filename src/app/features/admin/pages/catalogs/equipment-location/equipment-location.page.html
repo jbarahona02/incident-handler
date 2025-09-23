@@ -1,0 +1,124 @@
+@if (!isLoading && !isAddLocation && !isEditLocation) {
+    <app-data-table 
+        [title]="'Ubicaciones'" [headers]="headers" [data]="locationsToView"
+        (clickOnAdd)="addLocation()"
+        (clickOnEdit)="editEquipmentLocation($event)"
+        (clickOnDelete)="deleteEquipmentLocation($event)"
+    ></app-data-table>
+} 
+
+@if(isAddLocation || isEditLocation) {
+    <div class="mt-10 mr-10 mx-auto bg-white rounded-lg shadow-md">
+        <!-- Header -->
+        <div class="primary-color text-white px-6 py-4 rounded-t-lg">
+            <h2 class="text-xl md:text-2xl font-bold">{{ isAddLocation ? 'Agregar nueva ubicación' : 'Editar ubicación'}}</h2>
+            <p class="text-white-100 text-sm mt-1">Complete todos los campos obligatorios (*)</p>
+        </div>
+
+        <!-- Formulario -->
+        <form [formGroup]="locationForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Columna Izquierda -->
+                <div class="space-y-6">
+
+                     <!-- Nombre -->
+                    <app-text-input
+                        label="Nombre"
+                        formControlName="name"
+                        [required]="true"
+                        [maxLength]="50"
+                        placeholder="Ej. Laboratorio mecánica"
+                        [errorMessages]="{
+                            'required': 'El nombre es obligatorio',
+                            'maxlength': 'Máximo 50 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+
+                    <app-select-input
+                        label="Técnico de área"
+                        formControlName="assignedUser"
+                        [required]="false"
+                        [options]="allTech"
+                        optionValue="userAppId"
+                        optionLabel="name"
+                        placeholder="Selecciona un técnico"
+                        [errorMessages]="{
+                            'required': 'El técnico es obligatorio'
+                        }"
+                    ></app-select-input>
+                </div>
+
+                <!-- Columna Derecha -->
+                <div class="space-y-6">
+                    
+                    <app-checkbox-input
+                        label="¿Es edificio de básicos?"
+                        formControlName="isBasic"
+                    ></app-checkbox-input>
+
+                    <app-checkbox-input
+                        label="¿Es edificio de diversificado?"
+                        formControlName="isHighSchool"
+                    ></app-checkbox-input>
+
+                    <app-checkbox-input
+                        label="¿Es área administrativa?"
+                        formControlName="isAdministrative"
+                    ></app-checkbox-input>
+
+                    <app-text-input
+                        label="Código de laboratorio u oficina"
+                        formControlName="roomCode"
+                        [required]="true"
+                        [maxLength]="10"
+                        placeholder="Ej. A-503"
+                        [errorMessages]="{
+                            'required': 'El código es obligatorio',
+                            'maxlength': 'Máximo 10 caracteres permitidos'
+                        }"
+                    ></app-text-input>
+                   
+                    <app-text-input
+                        label="Nivel de edificio"
+                        formControlName="floor"
+                        [required]="true"
+                        [maxLength]="1"
+                        [max]="10"
+                        [min]="1"
+                        [inputType]="'number'"
+                        placeholder="Ej. 1"
+                        [errorMessages]="{
+                            'required': 'El nivel es obligatorio',
+                            'maxlength': 'Máximo 1 caracteres permitidos',
+                        }"
+                    ></app-text-input>   
+                    <!-- Estado Activo/Inactivo -->
+                    @if (!isAddLocation) {
+                        <app-checkbox-input
+                            label="Estado"
+                            formControlName="isActive"
+                        ></app-checkbox-input>
+                    }
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button
+                    type="button"
+                    (click)="onCancel()"
+                    class="flex-1 sm:flex-none px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+                >
+                    Cancelar
+                </button>
+                <button
+                    type="submit"
+                    [disabled]="locationForm.invalid && !isLoading"
+                    class="flex-1 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                >
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+}
