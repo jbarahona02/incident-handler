@@ -31,6 +31,7 @@ export class HttpRequestService {
   private userUrlBase: string = environment.apiUserMicroService;
   private authUrlBase: string = environment.apiAuthMicroService;
   private incidentUrlBase : string = environment.apiIncidentMicroService;
+  private equipmentUrlBase : string = environment.apiEquipmentMicroService;
 
   constructor(
     private http: HttpClient,
@@ -143,6 +144,9 @@ export class HttpRequestService {
       break;
       case 
         'incident': url = `${this.incidentUrlBase.replace(/\/$/, '')}/${endpoint}`;
+      break;
+      case
+        'equipment': url= `${this.equipmentUrlBase.replace(/\/$/, '')}/${endpoint}`;
       break;
     } 
     return url;

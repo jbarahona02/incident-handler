@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 enum FEATURES_PAGE {
     AUTH = 'authentication',
     ADMIN = 'admin',
-    REPORTER = 'reporter'
+    REPORTER = 'reporter',
+    TECHNICAL_SUPPORT = "technical-support"
 }
 
 export const routes: Routes = [
@@ -26,6 +27,10 @@ export const routes: Routes = [
             {
                 path: FEATURES_PAGE.REPORTER,
                 loadChildren: () => import('./features/reporter/reporter.routes').then(r => r.REPORTER_ROUTES)
+            },
+            {
+                path: FEATURES_PAGE.TECHNICAL_SUPPORT,
+                loadChildren: () => import('./features/technical-support/technical-support.route').then(r => r.REPORTER_ROUTES)
             }
         ]
     },

@@ -102,6 +102,9 @@ export class LoginFormComponent implements OnInit, OnDestroy {
           case ROLES.REPORTER:
              this.router.navigate(["reporter","home"]);
           break;
+          case ROLES.TECHNICAL_SUPPORT:
+            this.router.navigate(["technical-support","home"]);
+          break;
         }
       } else {
         // Marcar todos los campos como tocados para mostrar errores
