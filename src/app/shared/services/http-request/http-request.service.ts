@@ -89,7 +89,7 @@ export class HttpRequestService {
   /**
    * Realiza una petición PATCH
    */
-  async patch<T>(microService: string, endpoint: string, body: any, options?: RequestOptions): Promise<T> {
+  async patch<T>(microService: string, endpoint: string, body?: any, options?: RequestOptions): Promise<T> {
     const url = this.buildUrl(microService, endpoint);
     const requestOptions = options || {};
     

@@ -1,6 +1,5 @@
 export interface IncidentDetailStatus {
-    incidentDetailStatusCode: string;
+    incidentDetailStatusCode: 'PEN_ASG' | 'ASG' | 'REV' | 'REP' | 'REPA' | 'FIN';
     name: string;
-    description: boolean;
-    isActive: boolean;
+    description: string;
 }

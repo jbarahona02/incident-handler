@@ -1,0 +1,57 @@
+.accordion-item {
+  transition: all 0.3s ease;
+}
+
+.accordion-content {
+  transition: all 0.3s ease;
+}
+
+.expand-icon {
+  transition: transform 0.3s ease;
+  
+  &.rotate-180 {
+    transform: rotate(180deg);
+  }
+}
+
+// Colores personalizados para los estados
+.bg-incidente-pendiente { background-color: #fef3c7; }
+.bg-incidente-asignado { background-color: #dbeafe; }
+.bg-incidente-revision { background-color: #fce7f3; }
+.bg-incidente-reparacion { background-color: #fef7cd; }
+.bg-incidente-reparado { background-color: #dcfce7; }
+.bg-incidente-finalizado { background-color: #f0fdf4; }
+
+// Colores para barras de progreso
+.bg-progress-pendiente { background-color: #f59e0b; }
+.bg-progress-asignado { background-color: #3b82f6; }
+.bg-progress-revision { background-color: #ec4899; }
+.bg-progress-reparacion { background-color: #eab308; }
+.bg-progress-reparado { background-color: #10b981; }
+.bg-progress-finalizado { background-color: #059669; }
+
+// Colores para prioridades
+.bg-priority-low { background-color: #dcfce7; color: #166534; }
+.bg-priority-medium { background-color: #fef3c7; color: #92400e; }
+.bg-priority-high { background-color: #fee2e2; color: #991b1b; }
+.bg-priority-critical { background-color: #fecaca; color: #7f1d1d; }
+
+// Mejoras responsive
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .accordion-header {
+    padding: 1rem;
+    
+    .flex.items-center {
+      align-items: flex-start;
+    }
+  }
+  
+  .grid-cols-1 {
+    gap: 1rem;
+  }
+}

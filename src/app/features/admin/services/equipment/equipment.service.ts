@@ -103,7 +103,7 @@ export class EquipmentService {
       model: equipment.model,
       equipmentLocationId: equipment.equipmentLocationId,
       warrantyExpiredDate: equipment.warrantyExpiredDate,
-      isWarrantyExpired: false,
+      isWarrantyExpired: equipment.isWarrantyExpired,
       isActive: true
     };
     

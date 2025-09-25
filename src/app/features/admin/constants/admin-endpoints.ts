@@ -16,5 +16,6 @@ export const AdminEndpoints = {
     USER : `${microServiceUser}`,
     EQUIPMENT_LOCATION: `${microServiceEquipment}/equipment-location`,
     EQUIPMENT_TYPE: `${microServiceEquipment}/equipment-type`,
-    EQUIPMENT: `${microServiceEquipment}/equipment`
+    EQUIPMENT: `${microServiceEquipment}/equipment`,
+    INCIDENT: `${microServiceIncident}`
 }

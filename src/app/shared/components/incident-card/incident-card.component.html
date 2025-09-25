@@ -1,13 +1,12 @@
 <div class="bg-white rounded-lg shadow-md overflow-hidden border-l-4 
-            {{ getPriorityClass(incident.incidentPriorityLevelCode).split(' ')[2] }}">
+            {{ getPriorityClass(incident.incidentPriorityLevel.incidentPriorityLevelCode).split(' ')[2] }}">
   <!-- Cabecera de la Card -->
   <div class="px-4 py-3 border-b flex justify-between items-center">
     <div>
       <h3 class="font-semibold text-lg">Incidente {{ incident.incidentId }}</h3>
-      <p class="text-sm text-gray-500">{{ getIncidentTypeText(incident.incidentTypeCode) }}</p>
     </div>
-    <span class="text-xs px-2 py-1 rounded-full {{ getPriorityClass(incident.incidentPriorityLevelCode) }}">
-      {{ getPriorityText(incident.incidentPriorityLevelCode) }}
+    <span class="text-xs px-2 py-1 rounded-full {{ getPriorityClass(incident.incidentPriorityLevel.incidentPriorityLevelCode) }}">
+      {{ getPriorityText(incident.incidentPriorityLevel.incidentPriorityLevelCode) }}
     </span>
   </div>
 
@@ -15,16 +14,18 @@
   <div class="p-4">
     <p class="text-gray-600 mb-3">{{ getShortDescription(incident.description) }}</p>
     
-    <div class="grid grid-cols-2 gap-2 text-sm mb-3">
-      <div>
-        <span class="font-medium">Ubicación:</span>
-        <p class="text-gray-500">{{ incident.locationId }}</p>
+    @if(incident.locationId && incident.reportUserAppId){
+      <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+        <div>
+          <span class="font-medium">Ubicación:</span>
+          <p class="text-gray-500">{{ incident.locationId }}</p>
+        </div>
+        <div>
+          <span class="font-medium">Reportado por:</span>
+          <p class="text-gray-500">{{ incident.reportUserAppId }}</p>
+        </div>
       </div>
-      <div>
-        <span class="font-medium">Reportado por:</span>
-        <p class="text-gray-500">Usuario {{ incident.reportUserAppId }}</p>
-      </div>
-    </div>
+    }
 
     <div class="flex justify-between items-center text-sm">
       <span class="text-gray-500">{{ incident.reportedDate | date:'mediumDate' }}</span>
@@ -37,7 +38,7 @@
   <!-- Pie de la Card -->
   <div class="px-4 py-2 bg-gray-50 border-t flex justify-end">
     <button 
-      [routerLink]="['/incidentes', incident.incidentId]"
+       (click)="goToPage()"
       class="text-blue-600 hover:text-blue-800 text-sm font-medium"
     >
       Ver detalles

@@ -55,6 +55,99 @@
                 </div>
             </div>
 
+            <!-- Sección de Detalles -->
+            <div class="border-t border-gray-200 pt-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">Detalles del Incidente</h3>
+                    <button
+                        type="button"
+                        (click)="addDetail()"
+                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                    >
+                        + Agregar Detalle
+                    </button>
+                </div>
+
+                <!-- Lista de detalles -->
+                <div formArrayName="details" class="space-y-4">
+                    <div 
+                        *ngFor="let detail of detailsArray.controls; let i = index" 
+                        [formGroupName]="i"
+                        class="bg-gray-50 p-4 rounded-lg border border-gray-200"
+                    >
+                        <div class="flex justify-between items-start mb-3">
+                            <h4 class="font-medium text-gray-700">Detalle #{{ i + 1 }}</h4>
+                            <button
+                                type="button"
+                                (click)="removeDetail(i)"
+                                class="text-red-600 hover:text-red-800 font-medium text-sm"
+                                [disabled]="detailsArray.length === 1"
+                                [class.opacity-50]="detailsArray.length === 1"
+                                [class.cursor-not-allowed]="detailsArray.length === 1"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Descripción del detalle -->
+                            <div class="md:col-span-2">
+                                <app-textarea-input
+                                    label="Descripción del detalle"
+                                    formControlName="description"
+                                    [required]="true"
+                                    placeholder="Describa el detalle específico"
+                                    [rows]="3"
+                                    [errorMessages]="{
+                                        'required': 'La descripción del detalle es obligatoria'
+                                    }"
+                                ></app-textarea-input>
+                            </div>
+
+                            <!-- Selector de Equipo -->
+                            <div>
+                                <app-select-input
+                                    label="Equipo"
+                                    formControlName="equipmentId"
+                                    [required]="true"
+                                    [options]="equipments"
+                                    optionValue="equipmentId"
+                                    optionLabel="name"
+                                    placeholder="Selecciona el equipo"
+                                    [errorMessages]="{
+                                        'required': 'El equipo es obligatorio'
+                                    }"
+                                ></app-select-input>
+                            </div>
+
+                            <!-- Selector de Ubicación -->
+                            <div>
+                                <app-select-input
+                                    label="Ubicación"
+                                    formControlName="equipmentLocationId"
+                                    [required]="true"
+                                    [options]="equipmentLocations"
+                                    optionValue="equipmentLocationId"
+                                    optionLabel="name"
+                                    placeholder="Selecciona la ubicación"
+                                    [errorMessages]="{
+                                        'required': 'La ubicación es obligatoria'
+                                    }"
+                                ></app-select-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensaje cuando no hay detalles -->
+                 @if(detailsArray.length === 0){
+                    <div class="text-center py-8 text-gray-500">
+                        No hay detalles agregados. Haz clic en "Agregar Detalle" para comenzar.
+                    </div>
+                 }
+                
+            </div>
+
             <!-- Botones -->
             <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                 <button

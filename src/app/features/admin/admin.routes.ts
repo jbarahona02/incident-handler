@@ -12,7 +12,8 @@ export enum ADMIN_PAGES {
     INCIDENT_PRIORITY_LEVEL = 'inci-level',
     LOCATION = 'location',
     EQUIPMENT_TYPE = 'equi-type',
-    EQUIPMENT = 'equipment'
+    EQUIPMENT = 'equipment',
+    INCIDENT_DETAIL = "incident-detail/:id"
 }
 
 const adminItems: NavItem[] = [
@@ -36,7 +37,7 @@ export const ADMIN_ROUTES: Routes = [
             },
             {
                 path: ADMIN_PAGES.HOME,
-                loadComponent: () => import('./pages/home-admin/home-admin.page').then(p => p.HomeAdminPage)
+                loadComponent: () => import('./pages/incidents/incident-list/incident-list.page').then(p => p.IncidentListPage)
             },
             {
                 path: ADMIN_PAGES.ROLES,
@@ -69,6 +70,10 @@ export const ADMIN_ROUTES: Routes = [
             {
                 path: ADMIN_PAGES.EQUIPMENT,
                 loadComponent: () => import('./pages/catalogs/equipment/equipment.page').then(p => p.EquipmentPage)
+            },
+            {
+                path: ADMIN_PAGES.INCIDENT_DETAIL,
+                loadComponent: () => import('./pages/incidents/incident-detail/incident-detail.page').then(p => p.IncidentDetailPage)
             }
         ]
     },

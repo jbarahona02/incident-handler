@@ -1,0 +1,7 @@
+ <app-incident-detail-admin
+    [incident]="incident"
+  [technicians]="allTech"
+  [equipments]="allEquipments"
+  [equipmentLocations]="allLocations"
+  (technicianAssigned)="onTechnicianAssigned($event)"
+></app-incident-detail-admin>
