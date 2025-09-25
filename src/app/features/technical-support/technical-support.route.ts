@@ -6,6 +6,7 @@ import { Sidebar } from "../../shared/components/sidebar/sidebar.component";
 export enum TECHNICAL_SUPPORT_PAGES {
     HOME = 'home',
     VIEW_INCIDENT = 'view-inci',
+    DETAIL_INCIDENT = 'detail-incident/:id'
 }
 
 const adminItems: NavItem[] = [
@@ -16,11 +17,11 @@ const adminItems: NavItem[] = [
     }
 ];
 
-export const REPORTER_ROUTES: Routes = [
+export const TECHNICAL_SUPPORT_ROUTES: Routes = [
     {
         path: '',
         component: Sidebar,
-        data: { navItems: adminItems , role : "REPORTER" }, // Pasamos los items del menú
+        data: { navItems: adminItems , role : "TECH" }, // Pasamos los items del menú
         children: [
             {
                 path: '',
@@ -29,8 +30,13 @@ export const REPORTER_ROUTES: Routes = [
             },
             {
                 path: TECHNICAL_SUPPORT_PAGES.HOME,
-                loadComponent: () => import('./pages/incidents/incidents.page').then(p => p.IncidentsPage)
+                loadComponent: () => import('./pages/incidents/incident-list/incident-list.page').then(p => p.IncidentListPage)
             },
+            {
+                path: TECHNICAL_SUPPORT_PAGES.DETAIL_INCIDENT,
+                loadComponent: () => import('./pages/incidents/incident-detail/incident-detail.page').then(p => p.IncidentDetailPage)
+            }
+            
         ]
     },
     {

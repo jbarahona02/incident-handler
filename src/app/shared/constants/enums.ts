@@ -16,3 +16,12 @@ export enum ROLES {
     REPORTER = "REPORTER",
     TECHNICAL_SUPPORT = "TECH"
 }
+
+export enum INCIDENT_FLOW {
+    'PEDIENTE_ASIGNACION' = 'PEN_ASG',
+    'ASIGNADO' = 'ASG',
+    'EN_REVISION' = 'REV',
+    'EN_REPARACION' = 'REP',
+    'REPARADO' = 'REPA',
+    'FINALIZADO' = 'FIN'
+}

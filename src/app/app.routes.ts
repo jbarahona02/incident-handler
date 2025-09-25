@@ -30,7 +30,7 @@ export const routes: Routes = [
             },
             {
                 path: FEATURES_PAGE.TECHNICAL_SUPPORT,
-                loadChildren: () => import('./features/technical-support/technical-support.route').then(r => r.REPORTER_ROUTES)
+                loadChildren: () => import('./features/technical-support/technical-support.route').then(r => r.TECHNICAL_SUPPORT_ROUTES)
             }
         ]
     },

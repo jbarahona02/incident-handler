@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SelectInputComponent, TextareaInputComponent, TextInputComponent } from '../../../../shared/components';
 import { IncidentTypeService } from '../../../admin/services/incident-type/incident-type.service';
 import { IncidentPriorityLevelService } from '../../../admin/services/incident-priority-level/incident-priority-level.service';
-import { IncidentPriorityLevel, IncidentType } from '../../../../shared/interfaces/models';
+import { Equipment, EquipmentLocation, IncidentPriorityLevel, IncidentType } from '../../../../shared/interfaces/models';
 import { Router } from '@angular/router';
 import { noWhitespaceValidator } from '../../../../shared/utils/common-functions';
+import { EquipmentService } from '../../../admin/services/equipment/equipment.service';
+import { EquipmentLocationService } from '../../../admin/services/equipment-location/equipment-location.service';
+import { ReporterIncidentService } from '../../services/reporter-incident/reporter-incident.service';
 
 @Component({
   selector: 'app-reporter-add-incident',
@@ -23,12 +26,17 @@ export class AddIncidentPage {
   incidentForm: FormGroup;
   incidentTypes: IncidentType[] = [];
   incidentPriorityLevel: IncidentPriorityLevel[] = [];
+  equipments: Equipment[] = [];
+  equipmentLocations: EquipmentLocation[] = [];
   
   constructor(
      private formGroup : FormBuilder,
      private incidentTypeService: IncidentTypeService,
      private incidentPriorityLevelService: IncidentPriorityLevelService,
-     private router : Router
+     private equipmentService: EquipmentService,
+     private equipmentLocationService: EquipmentLocationService,
+     private router : Router,
+     private reporterIncidentService: ReporterIncidentService
   ){
      this.incidentForm = this.formGroup.group({
       incidentTypeCode: ['', Validators.required],
@@ -36,14 +44,37 @@ export class AddIncidentPage {
       description: ['', [
         Validators.required,
         Validators.maxLength(50),
-        noWhitespaceValidator
+        noWhitespaceValidator,
       ]],
+      details: this.formGroup.array([])
+    });
+  }
+
+  // Getter para acceder fácilmente al FormArray
+  get detailsArray(): FormArray {
+    return this.incidentForm.get('details') as FormArray;
+  }
+
+  // Crear un nuevo grupo de detalle
+  createDetailGroup(): FormGroup {
+    return this.formGroup.group({
+      description: ['', [Validators.required, noWhitespaceValidator]],
+      equipmentId: ['', Validators.required],
+      equipmentLocationId: ['', Validators.required]
     });
   }
 
   async ngOnInit(){
-    this.incidentTypes = await this.getAllIncidentTypes();
-    this.incidentPriorityLevel = await this.getAllIncidentPriorityLevel();
+    try {
+      this.incidentTypes = await this.getAllIncidentTypes();
+      this.incidentPriorityLevel = await this.getAllIncidentPriorityLevel();
+      this.equipments = await this.equipmentService.getAllEquipment();
+      this.equipmentLocations = await this.equipmentLocationService.getAllLocation();
+
+      this.addDetail();
+    } catch(err){
+
+    }
   }
 
   onCancel(): void {
@@ -72,6 +103,12 @@ export class AddIncidentPage {
       control.markAsTouched();
       if (control instanceof FormGroup) {
         this.markFormGroupTouched(control);
+      } else if (control instanceof FormArray) {
+        control.controls.forEach(arrayControl => {
+          if (arrayControl instanceof FormGroup) {
+            this.markFormGroupTouched(arrayControl);
+          }
+        });
       }
     });
   }
@@ -98,20 +135,36 @@ export class AddIncidentPage {
 
   cleanValuesOfForm(){
     this.incidentForm.reset({});
+    // Limpiar el array de detalles
+    while (this.detailsArray.length !== 0) {
+      this.detailsArray.removeAt(0);
+    }
+    // Agregar un detalle vacío después de limpiar
+    this.addDetail();
   }
 
   async onSubmit(): Promise<void> {
     if (this.incidentForm.valid) {
       try {
 
-    
+        await this.reporterIncidentService.addIncident(this.incidentForm.value);
         
-        this.cleanValuesOfForm();
+        this.router.navigate(["reporter"]);
       } catch(err) {
         
       }
     } else {
       this.markFormGroupTouched(this.incidentForm);
     }
+  }
+
+  // Agregar nuevo detalle
+  addDetail(): void {
+    this.detailsArray.push(this.createDetailGroup());
+  }
+
+  // Eliminar detalle
+  removeDetail(index: number): void {
+    this.detailsArray.removeAt(index);
   }
 }

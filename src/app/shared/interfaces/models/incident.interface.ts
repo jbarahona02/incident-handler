@@ -1,12 +1,17 @@
+import { IncidentDetail } from "./incident-detail.interface";
+import { IncidentPriorityLevel } from "./incident-priority-level.interface";
+import { IncidentType } from "./incident-type.interface";
+
 export interface Incident {
-  incidentId: string;
+  incidentId: number;
   description: string;
-  incidentTypeCode: string;
+  incidentType: IncidentType;
   locationId: string;
-  incidentPriorityLevelCode: string;
+  incidentPriorityLevel: IncidentPriorityLevel;
   reportUserAppId: number;
-  reportedDate: Date;
+  reportedDate: string;
   isCompleted: boolean;
   inProgress: boolean;
-  completedDate: Date;
+  completedDate: string;
+  incidentDetails: IncidentDetail[];
 }

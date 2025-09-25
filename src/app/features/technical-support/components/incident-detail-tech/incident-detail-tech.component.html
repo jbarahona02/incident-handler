@@ -1,0 +1,81 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Título -->
+  <div class="mb-6">
+    <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Detalles del Incidente</h1>
+  </div>
+
+  <!-- Detalles de equipos -->
+  @if (incident.incidentDetails.length > 0) {
+    <div class="mt-6">
+      <h4 class="font-medium text-gray-700 mb-3 text-lg">
+        Equipos Afectados ({{ incident.incidentDetails.length }})
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @for (detail of incident.incidentDetails; track detail.incidentDetailId) {
+          <div 
+            class="bg-white rounded-lg p-4 border hover:shadow-sm transition-shadow"
+            [class]="getStatusConfig(detail.incidentDetailStatus.incidentDetailStatusCode).borderColor + ' border-l-4'">
+            
+            <!-- Header del detalle -->
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <span class="font-medium text-gray-700">Equipo {{ getEquipment(detail.equipmentId) }}</span>
+                <span 
+                  class="ml-2 px-2 py-1 rounded text-xs font-medium"
+                  [class]="getStatusConfig(detail.incidentDetailStatus.incidentDetailStatusCode).bgColor + ' ' + getStatusConfig(detail.incidentDetailStatus.incidentDetailStatusCode).textColor">
+                  {{ detail.incidentDetailStatus.name }}
+                </span>
+              </div>
+            </div>
+            
+            <!-- Descripción -->
+            <p class="text-sm text-gray-600 mb-3">{{ detail.description }}</p>
+            
+            <!-- Botón para cambiar estado -->
+            <div class="mb-3">
+              <button 
+                type="button"
+                class="w-full px-3 py-2 text-white rounded-md hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                [class]="getButtonClass(detail)"
+                (click)="onStatusChange(detail)"
+                [disabled]="!canChangeStatus(detail)">
+                {{ getNextStatusButtonText(detail) }}
+              </button>
+              @if (!canChangeStatus(detail)) {
+                <p class="text-xs text-gray-500 mt-1 text-center">
+                  {{ getDisabledReason(detail) }}
+                </p>
+              }
+            </div>
+            
+            <!-- Información del detalle -->
+            <div class="space-y-1 text-xs text-gray-500">
+              <div class="flex justify-between">
+                <span>Ubicación:</span>
+                <span class="font-medium">{{ getEquipmentLocation(detail.equipmentLocationId) }}</span>
+              </div>
+              @if (detail.technicianUserAppId) {
+                <div class="flex justify-between">
+                  <span>Técnico asignado:</span>
+                  <span class="font-medium">#{{ detail.technicianUserAppId }}</span>
+                </div>
+              }
+              <div class="flex justify-between">
+                <span>Creado:</span>
+                <span>{{ formatDate(detail.createdAt) }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Actualizado:</span>
+                <span>{{ formatDate(detail.updatedAt) }}</span>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-8">
+      <p class="text-gray-500">No hay detalles de incidente disponibles.</p>
+    </div>
+  }
+</div>

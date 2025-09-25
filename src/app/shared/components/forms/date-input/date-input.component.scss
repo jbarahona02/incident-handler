@@ -1,22 +1,51 @@
-/* styles.css o component CSS */
-input[type="date"] {
-  color: transparent; /* Oculta el texto nativo */
+/* date-input.component.scss */
+:host {
+  display: block;
+}
+
+.date-input-container {
   position: relative;
-}
-
-input[type="date"]:focus {
-  color: inherit; /* Muestra el texto cuando está enfocado */
-}
-
-/* Para navegadores Webkit (Chrome, Safari) */
-input[type="date"]::-webkit-calendar-picker-indicator {
-  position: absolute;
-  right: 0;
-  top: 0;
   width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  cursor: pointer;
+}
+
+input[type="date"] {
+  color: transparent;
+  position: relative;
+  
+  /* Para móviles - asegurar que el picker se muestre correctamente */
+  @media (max-width: 768px) {
+    color: inherit; /* Mostrar texto en móviles */
+    font-size: 16px; /* Prevenir zoom en iOS */
+    
+    /* Forzar el picker nativo de móvil */
+    &::-webkit-calendar-picker-indicator {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+    
+    /* Estilos específicos para iOS */
+    &::-webkit-date-and-time-value {
+      text-align: left;
+    }
+  }
+}
+
+/* Prevenir problemas de visualización en diferentes navegadores móviles */
+@media (max-width: 768px) {
+  input[type="date"]:focus {
+    position: relative;
+    z-index: 1000;
+  }
+  
+  /* Para Firefox móvil */
+  input[type="date"]:in-range {
+    color: inherit;
+  }
 }

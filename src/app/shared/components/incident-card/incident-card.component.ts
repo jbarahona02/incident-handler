@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Incident } from '../../interfaces/models';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-incident-card',
@@ -14,18 +14,35 @@ import { RouterModule } from '@angular/router';
 })
 export class IncidentCard {
 
+  constructor(
+    private router : Router
+  ){
+
+  }
+
   @Input() incident: Incident = {
-    incidentId: '',
+    incidentId: 0,
     description: '',
-    incidentTypeCode: '',
+    incidentType: {
+      description: '',
+      incidentTypeCode: '',
+      name: ''
+    },
     locationId: '',
-    incidentPriorityLevelCode: '',
+    incidentPriorityLevel: {
+      description: '',
+      incidentPriorityLevelCode: '',
+      name: ''
+    },
     reportUserAppId: 0,
-    reportedDate: new Date(),
+    reportedDate: '',
     isCompleted: false,
     inProgress: false,
-    completedDate: new Date()
+    completedDate: '',
+    incidentDetails: []
   };
+
+  @Input() routeToDetail : string[]= [];
 
   getPriorityClass(priorityCode: string): string {
     const priorityMap: {[key: string]: string} = {
@@ -33,7 +50,7 @@ export class IncidentCard {
       'MEDIUM': 'bg-yellow-100 text-yellow-800 border-yellow-500',
       'HIGH': 'bg-red-100 text-red-800 border-red-500'
     };
-    return priorityMap[priorityCode] || 'bg-gray-100 text-gray-800 border-gray-500';
+    return priorityMap[priorityCode] ? priorityMap[priorityCode] : 'bg-gray-100 text-gray-800 border-gray-500';
   }
 
   getPriorityText(priorityCode: string): string {
@@ -42,7 +59,7 @@ export class IncidentCard {
       'MEDIUM': 'Media',
       'HIGH': 'Alta'
     };
-    return priorityMap[priorityCode] || 'Desconocida';
+    return priorityMap[priorityCode] ? priorityMap[priorityCode] : 'Desconocida';
   }
 
   getStatusClass(): string {
@@ -57,7 +74,7 @@ export class IncidentCard {
 
   getStatusText(): string {
     if (this.incident.isCompleted) {
-      return 'Resuelto';
+      return 'Finalizado';
     } else if (this.incident.inProgress) {
       return 'En Progreso';
     } else {
@@ -65,21 +82,12 @@ export class IncidentCard {
     }
   }
 
-  getIncidentTypeText(typeCode: string): string {
-    const typeMap: {[key: string]: string} = {
-      'PLUMBING': 'Fontanería',
-      'HVAC': 'Climatización',
-      'NETWORK': 'Redes',
-      'MAINTENANCE': 'Mantenimiento',
-      'EQUIPMENT': 'Equipo',
-      'ELECTRICAL': 'Eléctrico',
-      'CLEANING': 'Limpieza',
-      'SECURITY': 'Seguridad'
-    };
-    return typeMap[typeCode] || 'Otro';
+
+  getShortDescription(description: string | undefined): string {
+    return description ? description.length > 100 ? description.substring(0, 100) + '...' : description : "";
   }
 
-  getShortDescription(description: string): string {
-    return description.length > 100 ? description.substring(0, 100) + '...' : description;
+  goToPage(){
+    this.router.navigate(this.routeToDetail);
   }
 }

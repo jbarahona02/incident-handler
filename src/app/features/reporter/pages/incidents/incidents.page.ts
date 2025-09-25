@@ -4,7 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { DateInputComponent, IncidentCard, SelectInputComponent, TextInputComponent } from '../../../../shared/components';
 import { IncidentStatus } from '../../../technical-support/interfaces';
 import { Incident } from '../../../../shared/interfaces/models';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { ReporterIncidentService } from '../../services/reporter-incident/reporter-incident.service';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-reporter-incidents',
@@ -13,76 +15,16 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
     SelectInputComponent,
     DateInputComponent,
-    IncidentCard
-  ],
+    IncidentCard,
+    RouterModule
+],
   templateUrl: './incidents.page.html',
   styleUrl: './incidents.page.scss'
 })
 export class IncidentsPage {
 
-  incidents: Incident[] = [
-      {
-      incidentId: 'INC-001',
-      description: 'Fuga de agua en el baño principal del segundo piso',
-      incidentTypeCode: 'PLUMBING',
-      locationId: 'LOC-001',
-      incidentPriorityLevelCode: 'HIGH',
-      reportUserAppId: 1001,
-      reportedDate: new Date('2024-01-15T08:30:00'),
-      isCompleted: false,
-      inProgress: true,
-      completedDate: new Date()
-    },
-    {
-      incidentId: 'INC-002',
-      description: 'Aire acondicionado no funciona en la oficina 304',
-      incidentTypeCode: 'HVAC',
-      locationId: 'LOC-002',
-      incidentPriorityLevelCode: 'MEDIUM',
-      reportUserAppId: 1002,
-      reportedDate: new Date('2024-01-14T14:20:00'),
-      isCompleted: true,
-      inProgress: false,
-      completedDate: new Date('2024-01-15T10:00:00')
-    },
-    {
-      incidentId: 'INC-003',
-      description: 'Conexión de internet intermitente en el área de desarrollo',
-      incidentTypeCode: 'NETWORK',
-      locationId: 'LOC-003',
-      incidentPriorityLevelCode: 'HIGH',
-      reportUserAppId: 1003,
-      reportedDate: new Date('2024-01-15T09:45:00'),
-      isCompleted: false,
-      inProgress: true,
-      completedDate: new Date()
-    },
-    {
-      incidentId: 'INC-004',
-      description: 'Puerta del almacén principal no cierra correctamente',
-      incidentTypeCode: 'MAINTENANCE',
-      locationId: 'LOC-004',
-      incidentPriorityLevelCode: 'LOW',
-      reportUserAppId: 1004,
-      reportedDate: new Date('2024-01-13T16:00:00'),
-      isCompleted: false,
-      inProgress: false,
-      completedDate: new Date()
-    },
-    {
-      incidentId: 'INC-005',
-      description: 'Proyector no enciende en la sala de conferencias A',
-      incidentTypeCode: 'EQUIPMENT',
-      locationId: 'LOC-005',
-      incidentPriorityLevelCode: 'MEDIUM',
-      reportUserAppId: 1005,
-      reportedDate: new Date('2024-01-15T11:30:00'),
-      isCompleted: true,
-      inProgress: false,
-      completedDate: new Date('2024-01-15T15:45:00')
-    }
-    ];
-  
+  incidents: Incident[] = [];
+  isSearching : boolean = false;
     
   searchForm : FormGroup;
   allIncidentStatus: IncidentStatus[] = [
@@ -99,28 +41,62 @@ export class IncidentsPage {
   constructor(
     private formGroup : FormBuilder,
     private router : Router,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private reporterIncidentService : ReporterIncidentService
   ){
     this.searchForm = this.formGroup.group({
-      status: [''],
+      status: ['',],
       reportedDate: [''],
       completedDate: ['']
     });
   }
 
-  ngOnInit(){
+  async ngOnInit(){
      this.changeDetectorRef.detectChanges();
+     try {
+       this.incidents = await this.reporterIncidentService.getAllIncident();
+       this.incidents = this.incidents.sort((a,b) => b.incidentId - a.incidentId);
+
+       this.searchForm.get('status')?.valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe(async (data) => {
+          if(data) this.isSearching = true;
+          else {
+            this.isSearching = false;
+            this.incidents = await this.reporterIncidentService.getAllIncident();
+            this.incidents = this.incidents.sort((a,b) => b.incidentId - a.incidentId);
+            this.searchForm.reset();
+          }
+        });
+     } catch(err){
+
+     }
   }
 
   addIncident(){
     this.router.navigate(["reporter","add-incident"]);
   }
 
-  onSubmit(){
-    console.log("VALOR: ", this.searchForm.value);
+  async onSubmit(){
+    try {
+        if(this.searchForm.get('status')?.value){
+            this.incidents = await this.reporterIncidentService.getAllIncidentWithParams(
+              this.searchForm.get('status')?.value,
+              this.searchForm.get('reportedDate')?.value,
+              this.searchForm.get('completedDate')?.value
+            );
+            this.incidents = this.incidents.sort((a,b) => b.incidentId - a.incidentId);
+        }
+    } catch (err) {
+
+    }
   }
 
   getCurrentDate(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  cleanValuesOfForm(){
+    this.searchForm.reset({});
   }
 }

@@ -31,7 +31,7 @@
                         optionLabel="label"
                         placeholder="Selecciona el estado"
                         [errorMessages]="{
-                            'required': 'El rol es obligatorio'
+                            
                         }"
                     ></app-select-input>
                 </div>
@@ -63,6 +63,7 @@
                    
                     <button
                         type="submit"
+                        [disabled]="!isSearching"
                         class="flex-1 lg:mt-5 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
                     >
                         Buscar
@@ -73,17 +74,23 @@
         </form>
     </div>
     <div class="mt-0 mr-10 mx-auto">
-        <!-- Título y controles -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Historial de Incidentes</h2>
-        </div>
+        @if(incidents.length > 0){
+             <!-- Título y controles -->
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Historial de Incidentes</h2>
+            </div>
 
-        <!-- Grid de Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Card de Incidente -->
-            @for (incident of incidents; track incident.incidentId) {
-            <app-incident-card [incident]="incident"></app-incident-card>
-            }
-        </div>
+            <!-- Grid de Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card de Incidente -->
+                @for (incident of incidents; track incident.incidentId) {
+                    <app-incident-card [incident]="incident" [routeToDetail]="['reporter','detail-incident',incident.incidentId.toString()]"></app-incident-card>
+                }
+            </div>
+       } @else {
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">No hay incidentes coincidentes con la búsqueda</h2>
+            </div>
+       }
     </div>
 </div>

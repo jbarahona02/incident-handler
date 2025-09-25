@@ -1,3 +1,5 @@
+import { IncidentDetailStatus } from "./incident-detail-status.interface";
+
 export interface IncidentDetail {
     incidentDetailId: number;
     description: string;
@@ -5,5 +7,7 @@ export interface IncidentDetail {
     equipmentId: number;
     equipmentLocationId: number;
     technicianUserAppId: number;
-    incidentDetailStatusCode: string;
+    incidentDetailStatus: IncidentDetailStatus;
+    createdAt: string;
+    updatedAt: string;
 }
