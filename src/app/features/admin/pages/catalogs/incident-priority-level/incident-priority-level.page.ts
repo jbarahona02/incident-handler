@@ -101,7 +101,7 @@ export class IncidentPriorityLevelPage {
     try {
       this.isLoading = true;
       await this.incidentPriorityLevelService.deleteIncidentPriorityLevel(object['id']);
-      this.messageService.showSuccess("Nivel de prioridad eliminado con éxito.","Incidente").subscribe();
+      this.messageService.showSuccess("Nivel de prioridad eliminado con éxito.","Incidente");
       await this.getAllIncidentPriorityLevels();
       this.isLoading = false;
     } catch(err) {
@@ -117,11 +117,11 @@ export class IncidentPriorityLevelPage {
         
         if(this.isAddIncidentPriorityLevel) {
           await this.incidentPriorityLevelService.createIncidentPriorityLevel(this.incidentPriorityLevelForm.value);
-          this.messageService.showSuccess("Nivel de prioridad agregado con éxito.","Incidente").subscribe();
+          this.messageService.showSuccess("Nivel de prioridad agregado con éxito.","Incidente");
         } else {
            this.incidentPriorityLevelForm.get('incidentPriorityLevelCode')?.enable();
            await this.incidentPriorityLevelService.updateIncidentPriorityLevel(this.incidentPriorityLevelForm.value['incidentPriorityLevelCode'],this.incidentPriorityLevelForm.value);
-           this.messageService.showSuccess("Nivel de prioridad actualizado con éxito.","Incidente").subscribe();
+           this.messageService.showSuccess("Nivel de prioridad actualizado con éxito.","Incidente");
         }
         
         this.isLoading = false;

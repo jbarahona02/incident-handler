@@ -121,12 +121,12 @@ export class UserPage {
   
         if(this.isAddUser) {
           await this.userService.createUser (this.userForm.value);
-          this.messageService.showSuccess("Usuario agregado con éxito.","Usuario").subscribe();
+          this.messageService.showSuccess("Usuario agregado con éxito.","Usuario");
         } else {
            this.userForm.get('userTypeCode')?.enable();
            this.userForm.get('password')?.enable();
            await this.userService.updateUser(this.userID,this.userForm.value);
-           this.messageService.showSuccess("Usuario actualizado con éxito.","Usuario").subscribe();
+           this.messageService.showSuccess("Usuario actualizado con éxito.","Usuario");
         }
         
         this.isLoading = false;

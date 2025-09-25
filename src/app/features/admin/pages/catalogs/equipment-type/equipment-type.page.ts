@@ -92,7 +92,7 @@ export class EquipmentTypePage {
     try {
       this.isLoading = true;
       await this.equipmentTypeService.deleteEquipmentType(object['id']);
-      this.messageService.showSuccess("Tipo de equipo eliminado con éxito.","Tipo de equipo").subscribe();
+      this.messageService.showSuccess("Tipo de equipo eliminado con éxito.","Tipo de equipo");
       await this.getAllEquipmentType();
       this.isLoading = false;
     } catch(err) {
@@ -108,11 +108,11 @@ export class EquipmentTypePage {
         
         if(this.isAddEquipmentType) {
           await this.equipmentTypeService.createEquipmentType(this.equipmentTypeForm.value);
-          this.messageService.showSuccess("Tipo de equipo agregado con éxito.","Tipo de equipo").subscribe();
+          this.messageService.showSuccess("Tipo de equipo agregado con éxito.","Tipo de equipo");
         } else {
            this.equipmentTypeForm.get('equipmentTypeCode')?.enable();
            await this.equipmentTypeService.updateEquipmentType(this.equipmentTypeForm.value['equipmentTypeCode'],this.equipmentTypeForm.value);
-           this.messageService.showSuccess("Tipo de equipo actualizado con éxito.","Tipo de equipo").subscribe();
+           this.messageService.showSuccess("Tipo de equipo actualizado con éxito.","Tipo de equipo");
         }
         
         this.isLoading = false;

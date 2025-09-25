@@ -94,7 +94,7 @@ export class RolePage {
     try {
       this.isLoading = true;
       await this.roleService.deleteRole(object['id']);
-      this.messageService.showSuccess("Rol eliminado con éxito.","Rol").subscribe();
+      this.messageService.showSuccess("Rol eliminado con éxito.","Rol");
       await this.getAllRoles();
       this.isLoading = false;
     } catch(err) {
@@ -110,11 +110,11 @@ export class RolePage {
         
         if(this.isAddRole) {
           await this.roleService.createRole(this.roleForm.value);
-          this.messageService.showSuccess("Rol agregado con éxito.","Rol").subscribe();
+          this.messageService.showSuccess("Rol agregado con éxito.","Rol");
         } else {
            this.roleForm.get('roleCode')?.enable();
            await this.roleService.updateRole(this.roleForm.value['roleCode'],this.roleForm.value);
-           this.messageService.showSuccess("Rol actualizado con éxito.","Rol").subscribe();
+           this.messageService.showSuccess("Rol actualizado con éxito.","Rol");
         }
         
         this.isLoading = false;

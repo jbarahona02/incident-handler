@@ -101,7 +101,7 @@ export class IncidentTypePage {
     try {
       this.isLoading = true;
       await this.incidentTypeService.deleteIncidentType(object['id']);
-      this.messageService.showSuccess("Tipo de incidente eliminado con éxito.","Tipo de incidente").subscribe();
+      this.messageService.showSuccess("Tipo de incidente eliminado con éxito.","Tipo de incidente");
       await this.getAllIncidentTypes();
       this.isLoading = false;
     } catch(err) {
@@ -117,11 +117,11 @@ export class IncidentTypePage {
         
         if(this.isAddIncidentType) {
           await this.incidentTypeService.createIncidentType(this.incidentTypeForm.value);
-          this.messageService.showSuccess("Tipo de incidente agregado con éxito.","Tipo de incidente").subscribe();
+          this.messageService.showSuccess("Tipo de incidente agregado con éxito.","Tipo de incidente");
         } else {
            this.incidentTypeForm.get('incidentTypeCode')?.enable();
            await this.incidentTypeService.updateIncidentType(this.incidentTypeForm.value['incidentTypeCode'],this.incidentTypeForm.value);
-           this.messageService.showSuccess("Tipo de incidente actualizado con éxito.","Tipo de incidente").subscribe();
+           this.messageService.showSuccess("Tipo de incidente actualizado con éxito.","Tipo de incidente");
         }
         
         this.isLoading = false;

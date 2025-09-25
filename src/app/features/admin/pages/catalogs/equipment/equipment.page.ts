@@ -132,7 +132,7 @@ export class EquipmentPage {
     try {
       this.isLoading = true;
       await this.equipmentService.deleteEquipment(object['id']);
-      this.messageService.showSuccess("Equipo eliminado con éxito.","Equipo").subscribe();
+      this.messageService.showSuccess("Equipo eliminado con éxito.","Equipo");
       await this.getAllEquipment();
       this.isLoading = false;
     } catch(err) {
@@ -148,12 +148,12 @@ export class EquipmentPage {
         if(this.isAddEquipment) {
           this.equipmentForm.get('isWarrantyExpired')?.enable();
           await this.equipmentService.createEquipment(this.equipmentForm.value);
-          this.messageService.showSuccess("Equipo agregado con éxito.","Equipo").subscribe();
+          this.messageService.showSuccess("Equipo agregado con éxito.","Equipo");
         } else {
            this.equipmentForm.get('isWarrantyExpired')?.enable();
            this.equipmentForm.get('equipmentTypeCode')?.enable();
            await this.equipmentService.updateEquipment(this.equipmentId,this.equipmentForm.value);
-           this.messageService.showSuccess("Equipo actualizado con éxito.","Equipo").subscribe();
+           this.messageService.showSuccess("Equipo actualizado con éxito.","Equipo");
         }
         
         this.equipmentForm.get('isWarrantyExpired')?.disable();

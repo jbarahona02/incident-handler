@@ -107,7 +107,7 @@ export class UserTypePage {
     try {
       this.isLoading = true;
       await this.userTypeService.deleteUserType(object['id']);
-      this.messageService.showSuccess("Tipo de ususario eliminado con éxito.","Tipo de usuario").subscribe();
+      this.messageService.showSuccess("Tipo de ususario eliminado con éxito.","Tipo de usuario");
       await this.getAllUserTypes();
       this.isLoading = false;
     } catch(err) {
@@ -123,12 +123,12 @@ export class UserTypePage {
   
         if(this.isAddUserType) {
           await this.userTypeService.createUserType(this.userTypeForm.value);
-          this.messageService.showSuccess("Tipo de usuario agregado con éxito.","Tipo de usuario").subscribe();
+          this.messageService.showSuccess("Tipo de usuario agregado con éxito.","Tipo de usuario");
         } else {
            this.userTypeForm.get('userTypeCode')?.enable();
            this.userTypeForm.get('roleCode')?.enable();
            await this.userTypeService.updateUserType(this.userTypeForm.value['userTypeCode'],this.userTypeForm.value);
-           this.messageService.showSuccess("Tipo de usuario actualizado con éxito.","Tipo de usuario").subscribe();
+           this.messageService.showSuccess("Tipo de usuario actualizado con éxito.","Tipo de usuario");
         }
         
         this.isLoading = false;
