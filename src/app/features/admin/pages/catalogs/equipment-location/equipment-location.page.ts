@@ -133,7 +133,7 @@ export class EquipmentLocationPage {
     try {
       this.isLoading = true;
       await this.equipmentLocationService.deleteEquipmentLocation(object['id']);
-      this.messageService.showSuccess("Ubicación eliminada con éxito.","Ubicación").subscribe();
+      this.messageService.showSuccess("Ubicación eliminada con éxito.","Ubicación");
       await this.getAllEquipmentLocation();
       this.isLoading = false;
     } catch(err) {
@@ -148,10 +148,10 @@ export class EquipmentLocationPage {
   
         if(this.isAddLocation) {
           await this.equipmentLocationService.createEquipmentLocation(this.locationForm.value);
-          this.messageService.showSuccess("Ubicación agregada con éxito.","Ubicación").subscribe();
+          this.messageService.showSuccess("Ubicación agregada con éxito.","Ubicación");
         } else {
            await this.equipmentLocationService.updateEquipmentLocation(this.equipmentLocationId,this.locationForm.value);
-           this.messageService.showSuccess("Ubicación actualizada con éxito.","Ubicación").subscribe();
+           this.messageService.showSuccess("Ubicación actualizada con éxito.","Ubicación");
         }
         
         this.isLoading = false;

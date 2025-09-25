@@ -10,6 +10,7 @@ import { noWhitespaceValidator } from '../../../../shared/utils/common-functions
 import { EquipmentService } from '../../../admin/services/equipment/equipment.service';
 import { EquipmentLocationService } from '../../../admin/services/equipment-location/equipment-location.service';
 import { ReporterIncidentService } from '../../services/reporter-incident/reporter-incident.service';
+import { MessageService } from '../../../../shared/services/message-service/message.service';
 
 @Component({
   selector: 'app-reporter-add-incident',
@@ -36,7 +37,8 @@ export class AddIncidentPage {
      private equipmentService: EquipmentService,
      private equipmentLocationService: EquipmentLocationService,
      private router : Router,
-     private reporterIncidentService: ReporterIncidentService
+     private reporterIncidentService: ReporterIncidentService,
+     private messageService: MessageService
   ){
      this.incidentForm = this.formGroup.group({
       incidentTypeCode: ['', Validators.required],
@@ -148,7 +150,7 @@ export class AddIncidentPage {
       try {
 
         await this.reporterIncidentService.addIncident(this.incidentForm.value);
-        
+        this.messageService.showSuccess("Incidente agregado con éxito.","Incidente");
         this.router.navigate(["reporter"]);
       } catch(err) {
         

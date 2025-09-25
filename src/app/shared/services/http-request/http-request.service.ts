@@ -170,7 +170,7 @@ export class HttpRequestService {
      // No mostrar diálogo de error para errores 401 (manejados por el interceptor)
     if (error.status !== 401) {
       setTimeout(() => {
-        this.messageService.showError(errorMessage).subscribe();
+        this.messageService.showError(errorMessage);
       }, 0);
     }
     
