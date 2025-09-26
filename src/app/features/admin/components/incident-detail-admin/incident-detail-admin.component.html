@@ -162,7 +162,7 @@
                             [value]="detail.technicianUserAppId || ''"
                             (change)="onTechnicianSelected(detail, $event)">
                             <option value="">Selecciona un técnico</option>
-                            @for (tech of technicians; track tech.userAppId) {
+                            @for (tech of getActiveTechs(); track tech.userAppId) {
                             <option [value]="tech.userAppId">
                                 {{ tech.name }}
                             </option>

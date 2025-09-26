@@ -104,7 +104,7 @@ export class EquipmentService {
       equipmentLocationId: equipment.equipmentLocationId,
       warrantyExpiredDate: equipment.warrantyExpiredDate,
       isWarrantyExpired: equipment.isWarrantyExpired,
-      isActive: true
+      isActive: equipment.isActive
     };
     
     return new Promise<Equipment>((resolve, reject) =>{
