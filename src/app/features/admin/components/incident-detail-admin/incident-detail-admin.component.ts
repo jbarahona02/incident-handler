@@ -174,4 +174,8 @@ export class IncidentDetailAdminComponent {
   
     return equipment?.name + " " + equipment?.brand;
   }
+
+  getActiveTechs() : UserApp[] {
+    return this.technicians.filter(tech => tech.isActive);
+  }
 }

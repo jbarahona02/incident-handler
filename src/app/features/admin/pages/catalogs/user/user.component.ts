@@ -60,7 +60,7 @@ export class UserPage {
 
   async ngOnInit() {
     await this.getAllUsers();
-    this.allUserTypes = await this.getAllUserTypes();
+    this.allUserTypes = (await this.getAllUserTypes()).filter(userType => userType.isActive);
   }
 
   async getAllUsers(){

@@ -76,8 +76,8 @@ export class EquipmentPage {
 
   async ngOnInit() {
     await this.getAllEquipment();
-    this.allEquipmentTypes = await this.equipmentTypeService.getAllEquipmentType();
-    this.allLocation = await this.equipmentLocationService.getAllLocation();
+    this.allEquipmentTypes = (await this.equipmentTypeService.getAllEquipmentType()).filter(equipment => equipment.isActive);
+    this.allLocation = (await this.equipmentLocationService.getAllLocation()).filter(location => location.isActive);
 
     this.equipmentForm.get('isWarrantyExpired')?.disable();
     this.equipmentForm.get('warrantyExpiredDate')?.valueChanges.subscribe(data =>{
@@ -119,7 +119,7 @@ export class EquipmentPage {
       equipmentLocationId: equipment?.equipmentLocationId || '',
       warrantyExpiredDate: String(equipment?.warrantyExpiredDate).split("T")[0] || this.getCurrentDate(),
       isWarrantyExpired: equipment?.isWarrantyExpired || false,
-      isActive: equipment?.isActive || true
+      isActive: equipment?.isActive 
     });
 
     this.equipmentForm.get('equipmentTypeCode')?.disable();
