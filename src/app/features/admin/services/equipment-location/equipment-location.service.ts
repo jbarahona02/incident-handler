@@ -60,7 +60,7 @@ export class EquipmentLocationService {
   
       let body = {
         name: newEquipmentLocation.name,
-        assignedUser: newEquipmentLocation.assignedUser,
+        assignedUser: newEquipmentLocation.assignedUser ? newEquipmentLocation.assignedUser : null ,
         isHighSchool: newEquipmentLocation.isHighSchool,
         isAdministrative: newEquipmentLocation.isAdministrative,
         roomCode: newEquipmentLocation.roomCode,
@@ -94,7 +94,7 @@ export class EquipmentLocationService {
     async updateEquipmentLocation(equipmentLocationId: number, equipmentLocation : EquipmentLocation) : Promise<EquipmentLocation> {
       let body = {
         name: equipmentLocation.name,
-        assignedUser: equipmentLocation.assignedUser,
+        assignedUser: equipmentLocation.assignedUser ? equipmentLocation.assignedUser : null,
         isHighSchool: equipmentLocation.isHighSchool,
         isAdministrative: equipmentLocation.isAdministrative,
         roomCode: equipmentLocation.roomCode,

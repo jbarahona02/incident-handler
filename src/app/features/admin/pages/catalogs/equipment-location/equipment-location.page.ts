@@ -111,7 +111,7 @@ export class EquipmentLocationPage {
       this.equipmentLocationId = equipmentLocation.equipmentLocationId;
       this.locationForm.setValue({
         name: equipmentLocation.name || '',
-        assignedUser: equipmentLocation.assignedUser || '1',
+        assignedUser: equipmentLocation.assignedUser || "",
         isBasic: !equipmentLocation.isAdministrative && !equipmentLocation.isHighSchool || false,
         isHighSchool: equipmentLocation.isHighSchool || false,
         isAdministrative: equipmentLocation.isAdministrative || false,
