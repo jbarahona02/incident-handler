@@ -26,7 +26,7 @@ import { MessageService } from '../../../../shared/services/message-service/mess
 export class AddIncidentPage {
   incidentForm: FormGroup;
   incidentTypes: IncidentType[] = [];
-  incidentPriorityLevel: IncidentPriorityLevel[] = [];
+  incidentPriorityLevels: IncidentPriorityLevel[] = [];
   equipments: Equipment[] = [];
   equipmentLocations: EquipmentLocation[] = [];
   
@@ -68,10 +68,10 @@ export class AddIncidentPage {
 
   async ngOnInit(){
     try {
-      this.incidentTypes = await this.getAllIncidentTypes();
-      this.incidentPriorityLevel = await this.getAllIncidentPriorityLevel();
-      this.equipments = await this.equipmentService.getAllEquipment();
-      this.equipmentLocations = await this.equipmentLocationService.getAllLocation();
+      this.incidentTypes = (await this.getAllIncidentTypes()).filter(incidentType => incidentType.isActive);
+      this.incidentPriorityLevels = (await this.getAllIncidentPriorityLevel()).filter(incidentPriorityLevel => incidentPriorityLevel.isActive);
+      this.equipments = (await this.equipmentService.getAllEquipment()).filter(equipment => equipment.isActive);
+      this.equipmentLocations = (await this.equipmentLocationService.getAllLocation()).filter(location => location.isActive);
 
       this.addDetail();
     } catch(err){

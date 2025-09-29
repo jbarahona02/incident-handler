@@ -62,7 +62,12 @@ export class EquipmentLocationPage {
   async ngOnInit() {
 
     await this.getAllEquipmentLocation();
-    this.allTech = (await this.getAllTechs()).filter(tech => tech.isActive);
+    
+    try {
+      this.allTech = (await this.getAllTechs()).filter(tech => tech.isActive);
+    } catch(err) {
+
+    }
   }
 
 
