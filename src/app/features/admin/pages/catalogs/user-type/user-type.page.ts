@@ -57,7 +57,12 @@ export class UserTypePage {
 
   async ngOnInit() {
     await this.getAllUserTypes();
-    this.allRoles = (await this.getAllRoles()).filter(role => role.isActive);
+   
+    try {
+       this.allRoles = (await this.getAllRoles()).filter(role => role.isActive);
+    } catch(err){
+
+    }
   }
 
 
