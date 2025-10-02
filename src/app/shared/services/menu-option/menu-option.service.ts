@@ -105,15 +105,9 @@ export class MenuOptionService {
       'USER_TYPES': 'attribution',
       'INCI_TYPES': 'fmd_bad',
       'INCI_LEVEL': 'equalizer',
-      'LISTA_INCIDENTES': 'list',
-      'NUEVO_INCIDENTE': 'add_circle',
-      'USUARIOS': 'people',
-      'LISTA_USUARIOS': 'group',
-      'CREAR_USUARIO': 'person_add',
-      'TEST': 'help',
-      'TEST_2': 'help_outline',
-      'TEST_3': 'star',
-      'CONFIG': 'settings'
+      'EQUIPMENT': 'desktop_windows',
+      'LOCATION': 'location_on',
+      'EQUI_TYPE': 'devices'
     };
 
     return iconMap[menuCode] || 'help';
